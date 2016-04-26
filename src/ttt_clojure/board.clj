@@ -1,5 +1,15 @@
 (ns ttt-clojure.board)
 
-(def spots-available 1)
+(defn spots-available [board]
+  (filter #(= % :empty) false) board)
 
-(defn new-board [size])
+(defn- calc-spots ([] (calc-spots 3))
+  ([rows] (range 1 (inc (* rows rows)))))
+
+(defn new-board [rows]
+  (let [initial-board {}
+        spots (calc-spots rows)]
+    (reduce (fn [board spot]
+              (assoc board spot {:empty true}))
+              initial-board
+              spots)))
