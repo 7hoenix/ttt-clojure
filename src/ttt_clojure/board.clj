@@ -1,15 +1,21 @@
 (ns ttt-clojure.board)
 
-(defn spots-available [board]
-  (filter #(= % :empty) false) board)
+(def available-mark " ")
+(def x-mark "X")
 
-(defn- calc-spots ([] (calc-spots 3))
-  ([rows] (range 1 (inc (* rows rows)))))
+(defn- filter-indexed [f coll]
+  (filter f (map-indexed (fn [a b] [a b]) coll)))
 
-(defn new-board [rows]
-  (let [initial-board {}
-        spots (calc-spots rows)]
-    (reduce (fn [board spot]
-              (assoc board spot {:empty true}))
-              initial-board
-              spots)))
+(defn new-board []
+  (vec (map
+         (fn [x] available-mark)
+         (range 9))))
+
+(defn make-move [board location mark]
+  (assoc board location mark))
+
+(defn available-spaces [board]
+  (map first
+       (filter-indexed
+         (fn [[idx space]] (= space available-mark))
+         board)))
