@@ -30,7 +30,7 @@
 (defn- sequence-wins [board potential-seq]
   (= potential-seq (map first
        (filter-indexed
-         (fn [[idx space]] (= space x-mark))
+         (fn [[idx location]] (some #(= location %) [x-mark]))
          board))))
 
 (defn game-over? [board]
