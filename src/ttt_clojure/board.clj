@@ -34,9 +34,10 @@
          (fn [[idx location]] (some #(= location %) player-marks))
          board))))
 
-; (defn- can-move? [board]
-;   (= (count (available-spaces board)) 0))
+(defn- can-move? [board]
+  (= (count (available-spaces board)) 0))
 
 (defn game-over? [board]
-  (some (fn [potential-seq] (sequence-wins board potential-seq))
-            winning-seqs))
+  (or (some (fn [potential-seq] (sequence-wins board potential-seq))
+            winning-seqs)
+      (can-move? board)))
