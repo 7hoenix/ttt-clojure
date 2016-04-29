@@ -35,13 +35,3 @@
          (board/game-over? game-over-board))))
 )
 
-; UI, start a game, create a board. Human v. Human.
-; Testing UI (what comes in and how do I test it).
-
-;  (it "checks if game is over"
-;  (it "prompts a user to play a game"
-
-; UI interface
-;  (it "gets input from user"
-;  (it "prints board"
-;  (it "asks for next move"
