@@ -59,6 +59,14 @@
         (-> @empty-board
             (make-moves board/o-mark [0 4 8])
             (board/game-over?))))
+
+  (it "handles a cats game"
+      (should=
+        true
+        (-> @empty-board
+            (make-moves board/x-mark [0 1 5 6 8])
+            (make-moves board/o-mark [2 3 4 7])
+            (board/game-over?))))
 )
 
 ; UI, start a game, create a board. Human v. Human.
