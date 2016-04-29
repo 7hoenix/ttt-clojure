@@ -19,30 +19,32 @@
       (should= board/x-mark (nth updated-board 5))))
 
   (it "gets available spaces on the board"
-    (let [the-board (board/make-move @empty-board 5 board/x-mark)]
       (should=
         '(0 1 2 3 4 6 7 8)
-        (board/available-spaces the-board))))
+        (-> @empty-board
+            (board/make-move 5 board/x-mark) 
+            (board/available-spaces))))
 
   (it "checks if move is valid"
-      (let [the-board (board/make-move @empty-board 5 board/x-mark)]
-        (should=
-          false
-          (board/valid-move? the-board 5))))
+      (should=
+        false
+        (-> @empty-board
+            (board/make-move 5 board/x-mark)
+            (board/valid-move? 5))))
 
   (it "checks if game is over"
-      (let [move-locations [0 1 2]
-            game-over-board (make-moves @empty-board board/x-mark move-locations)]
-        (should=
-         true
-         (board/game-over? game-over-board))))
+      (should=
+        true
+        (-> @empty-board
+            (make-moves board/x-mark [0 1 2])
+            (board/game-over?))))
 
   (it "checks if a game is over with a different winning sequence"
-      (let [move-locations [0 4 8]
-            game-over-board (make-moves @empty-board board/x-mark move-locations)]
-        (should=
-         true
-         (board/game-over? game-over-board))))
+      (should=
+        true
+        (-> @empty-board
+            (make-moves board/x-mark [0 4 8])
+            (board/game-over?))))
 
   (it "knows all winning sequences"
       (should=
@@ -52,12 +54,11 @@
          [0 4 8] [2 4 6]]))
 
   (it "allows either player to win the game"
-      (let [move-locations [0 4 8]
-            game-over-board (make-moves @empty-board board/o-mark move-locations)]
-        (should=
-         true
-         (board/game-over? game-over-board))))
-
+      (should=
+        true
+        (-> @empty-board
+            (make-moves board/o-mark [0 4 8])
+            (board/game-over?))))
 )
 
 ; UI, start a game, create a board. Human v. Human.
