@@ -45,22 +45,26 @@
          (board/game-over? game-over-board))))
 
   (it "knows all winning sequences"
-      (let [winning-seqs board/winning-seqs
-            test-seqs [[0 1 2] [3 4 5] [6 7 8] 
-                       [0 3 6] [1 4 7] [2 5 8] 
-                       [0 4 8] [2 4 6]]]
       (should=
-        winning-seqs
-        test-seqs)))
+        board/winning-seqs
+        [[0 1 2] [3 4 5] [6 7 8] 
+         [0 3 6] [1 4 7] [2 5 8] 
+         [0 4 8] [2 4 6]]))
+
+  ; (it "allows either player to win the game"
+  ;     (let [move-locations [0 4 8]
+  ;           game-over-board (make-moves @empty-board board/o-mark move-locations)]
+  ;       (should=
+  ;        true
+  ;        (board/game-over? game-over-board))))
+
 )
 
 ; UI, start a game, create a board. Human v. Human.
 ; Testing UI (what comes in and how do I test it).
 
-;  (it "checks if game is over"
-;  (it "prompts a user to play a game"
-
 ; UI interface
+;  (it "prompts a user to play a game"
 ;  (it "gets input from user"
 ;  (it "prints board"
 ;  (it "asks for next move"
