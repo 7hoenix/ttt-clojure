@@ -36,6 +36,13 @@
         (should=
          true
          (board/game-over? game-over-board))))
+
+  (it "checks if a game is over with a different winning sequence"
+      (let [move-locations [0 4 8]
+            game-over-board (make-moves @empty-board board/x-mark move-locations)]
+        (should=
+         true
+         (board/game-over? game-over-board))))
 )
 
 ; UI, start a game, create a board. Human v. Human.
@@ -48,4 +55,3 @@
 ;  (it "gets input from user"
 ;  (it "prints board"
 ;  (it "asks for next move"
-; chcks if a game is over with a different winning sequence.
