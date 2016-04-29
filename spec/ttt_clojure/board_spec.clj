@@ -2,6 +2,9 @@
   (:require [speclj.core :refer :all]
             [ttt-clojure.board :as board]))
 
+(defn- make-moves [b mark locations]
+  (reduce #(board/make-move % %2 mark) b locations))
+
 (describe "board"
   (with empty-board (board/new-board))
 
@@ -29,7 +32,7 @@
 
   (it "checks if game is over"
       (let [move-locations [0 1 2]
-            game-over-board (reduce #(board/make-move % %2 board/x-mark) @empty-board move-locations)]
+            game-over-board (make-moves @empty-board board/x-mark move-locations)]
         (should=
          true
          (board/game-over? game-over-board))))
@@ -45,3 +48,4 @@
 ;  (it "gets input from user"
 ;  (it "prints board"
 ;  (it "asks for next move"
+; chcks if a game is over with a different winning sequence.
