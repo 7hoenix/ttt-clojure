@@ -51,12 +51,12 @@
          [0 3 6] [1 4 7] [2 5 8] 
          [0 4 8] [2 4 6]]))
 
-  ; (it "allows either player to win the game"
-  ;     (let [move-locations [0 4 8]
-  ;           game-over-board (make-moves @empty-board board/o-mark move-locations)]
-  ;       (should=
-  ;        true
-  ;        (board/game-over? game-over-board))))
+  (it "allows either player to win the game"
+      (let [move-locations [0 4 8]
+            game-over-board (make-moves @empty-board board/o-mark move-locations)]
+        (should=
+         true
+         (board/game-over? game-over-board))))
 
 )
 
