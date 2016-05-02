@@ -21,5 +21,5 @@
   (let [message (str "Available moves are " available-moves)
        response (str->int (get-input message))]
     (if (contains? available-moves response)
-      true
+      response
       (prompt-move available-moves))))
