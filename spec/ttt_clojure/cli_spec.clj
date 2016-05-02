@@ -23,6 +23,11 @@
       (should=
         true
         (with-in-str "lkasdfj\nY" (cli/new-game))))
+
+  (it "prompts a user for a move"
+      (should=
+        true
+        (with-in-str "2" (cli/prompt-move [1 2 3]))))
   )
 
 
