@@ -68,12 +68,3 @@
             (make-moves board/o-mark [2 3 4 7])
             (board/game-over?))))
 )
-
-; UI, start a game, create a board. Human v. Human.
-; Testing UI (what comes in and how do I test it).
-
-; UI interface
-;  (it "prompts a user to play a game"
-;  (it "gets input from user"
-;  (it "prints board"
-;  (it "asks for next move"
