@@ -13,5 +13,6 @@
 ; Testing UI (what comes in and how do I test it).
 
 ; UI interface
+; (it "prompts to start a new game")
 ;  (it "prints board"
 ;  (it "asks for next move"
