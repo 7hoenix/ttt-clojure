@@ -28,12 +28,13 @@
       (should=
         true
         (with-in-str "2" (cli/prompt-move [1 2 3]))))
+
+  (it "re-prompts a user if input isn't valid"
+      (should=
+        true
+        (with-in-str "asdf\n5\n2" (cli/prompt-move [1 2 3]))))
+
   )
 
 
 ; UI, start a game. Human v. Human.
-; Testing UI (what comes in and how do I test it).
-
-; UI interface
-
-;  (it "asks for next move"

@@ -15,11 +15,11 @@
       :else (new-game))))
 
 (defn- str->int [s]
-  (Integer. (re-find #"\d+" s)))
+  (read-string s))
 
 (defn prompt-move [available-moves]
   (let [message (str "Available moves are " available-moves)
        response (str->int (get-input message))]
     (if (contains? available-moves response)
       true
-      false)))
+      (prompt-move available-moves))))
