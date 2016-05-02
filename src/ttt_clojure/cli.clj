@@ -9,11 +9,8 @@
 (defn new-game []
   (let [message "Would you like to start a new game? (enter y or n)"
         response (get-input message)]
-    (if (= response "y")
-      true
-      false)))
-    ; (cond
-    ;   (= response "y") true
-    ;   (= response "n") false
-    ;   :else (new-game))))
+    (cond
+      (= response "y") true
+      (= response "n") false
+      :else (new-game))))
 
