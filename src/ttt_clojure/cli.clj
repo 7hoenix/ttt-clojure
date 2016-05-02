@@ -20,6 +20,7 @@
 (defn prompt-move [available-moves]
   (let [message (str "Available moves are " available-moves)
        response (str->int (get-input message))]
-    (if (contains? available-moves response)
-      response
-      (prompt-move available-moves))))
+    (cond
+      (contains? available-moves response) response
+      (integer? response) false
+      :else (prompt-move available-moves))))

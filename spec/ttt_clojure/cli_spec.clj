@@ -5,34 +5,27 @@
 (describe "command line interface or cli"
   (it "gets input from user"
       (should=
-        "cake"
-        (with-in-str "cake" (cli/get-input "pie or cake?"))))
-
+        "y"
+        (with-redefs [println (fn [_] )]
+          (with-in-str "Y     \n" (cli/get-input "OK")))))
 
   (it "prompts a user to start a new game"
       (should=
         true
-        (with-in-str "y" (cli/new-game))))
-
-  (it "can handle bad data correctly"
-      (should=
-        true
-        (with-in-str "Y     \n" (cli/new-game))))
-
-  (it "forces a user to select again if data is wrong"
-      (should=
-        true
-        (with-in-str "lk$#@ as   dfj\nY" (cli/new-game))))
+        (with-redefs [cli/get-input (fn [_] "y")]
+          (cli/new-game))))
 
   (it "prompts a user for a move"
       (should=
-        2
-        (with-in-str "2" (cli/prompt-move [1 2 3]))))
+        false
+        (with-redefs [cli/get-input (fn [_] "3")]
+                      (cli/prompt-move [1 2 3]))))
 
   (it "re-prompts a user if input isn't valid"
       (should=
         2
-        (with-in-str "asdf\n5\n2" (cli/prompt-move [1 2 3])))))
+        (with-redefs [cli/get-input (fn [_] "2")]
+                      (cli/prompt-move [1 2 3])))))
 
 
 ; UI, start a game. Human v. Human.
