@@ -19,6 +19,10 @@
         true
         (with-in-str "Y \n" (cli/new-game))))
 
+  (it "forces a user to select again if data is wrong"
+      (should=
+        true
+        (with-in-str "lkasdfj\nY" (cli/new-game))))
   )
 
 
