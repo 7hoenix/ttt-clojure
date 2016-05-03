@@ -26,6 +26,3 @@
         2
         (with-redefs [cli/get-input (fn [_] "2")]
                       (cli/prompt-move [1 2 3])))))
-
-
-; UI, start a game. Human v. Human.
