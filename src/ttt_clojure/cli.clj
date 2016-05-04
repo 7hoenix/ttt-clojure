@@ -2,9 +2,16 @@
   (:require [ttt-clojure.board :as board]
             [clojure.string :as string]))
 
+(defn report [message]
+  (println message)
+  message)
+
 (defn get-input [question]
-  (println question)
+  (report question)
   (string/trim (string/lower-case (read-line))))
+
+(defn report-winner [input]
+  (report (str input " wins")))
 
 (defn new-game []
   (let [message "Would you like to start a new game? (enter y or n)"

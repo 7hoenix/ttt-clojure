@@ -28,4 +28,9 @@
       (should=
         2
         (with-redefs [cli/get-input (fn [_] "2")]
-                      (cli/prompt-move [1 2 3])))))
+                      (cli/prompt-move [1 2 3]))))
+
+  (it "reports winner to user"
+      (should=
+        "X wins"
+        (cli/report-winner "X"))))
