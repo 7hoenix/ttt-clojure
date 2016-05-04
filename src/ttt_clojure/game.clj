@@ -4,7 +4,9 @@
 
 (defn start [board current-player]
   (if (board/game-over? board)
-    (cli/report-winner current-player)))
+    (if (board/tie? board)
+      (cli/report-tie current-player)
+      (cli/report-winner current-player))))
 
 
 

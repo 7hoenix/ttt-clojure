@@ -33,4 +33,9 @@
   (it "reports winner to user"
       (should=
         "X wins"
-        (cli/report-winner "X"))))
+        (cli/report-winner "X")))
+
+  (it "reports tie"
+      (should=
+        "Cats game"
+        (cli/report-tie "don't care"))))

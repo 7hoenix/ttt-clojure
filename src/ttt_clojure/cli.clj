@@ -13,6 +13,9 @@
 (defn report-winner [input]
   (report (str input " wins")))
 
+(defn report-tie [_]
+  (report (str "Cats game")))
+
 (defn new-game []
   (let [message "Would you like to start a new game? (enter y or n)"
         response (get-input message)]

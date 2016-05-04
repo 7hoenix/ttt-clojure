@@ -4,22 +4,27 @@
             [ttt-clojure.cli :as cli]
             [ttt-clojure.board :as board]))
 
-(defn- make-moves [b mark locations]
-  (reduce #(board/make-move % %2 mark) b locations))
-
 (describe "game loop"
   (with-stubs)
-  (with empty-board (board/new-board))
 
   (it "ends the game if there is a winner"
       (with-redefs [cli/report-winner (fn [_] "X wins")]
         (should=
           "X wins"
-          (-> @empty-board
-              (make-moves board/x-mark [0 4 8])
-              (game/start "X"))))))
+          (-> ["X" " " " "
+               " " "X" " "
+               " " " " "X"]
+              (game/start "X")))))
 
-  ; (it "ends the game if it is tied"
+  (it "ends the game if it is tied"
+      (with-redefs [cli/report-tie (fn [_] "Cats game")]
+        (should=
+          "Cats game"
+          (-> ["X" "X" "O"
+               "O" "O" "X"
+               "X" "O" "X"]
+              (game/start "O"))))
+      ))
   ;     ; stub cli/report tie
   ;     ; same thing
   ;   )
