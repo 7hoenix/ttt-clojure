@@ -9,9 +9,4 @@
     (:symbol move)))
 
 (defn game-loop [board]
-  (let [move (cli/prompt-move board)
-        board (make-move board move)]
-  (if (board/game-over? board)
-    true
-    (game-loop board)
-    )))
+    )

@@ -3,6 +3,9 @@
             [ttt-clojure.cli :as cli]))
 
 (describe "command line interface or cli"
+  (around [it]
+          (with-out-str (it)))
+
   (it "gets input from user"
       (should=
         "y"
