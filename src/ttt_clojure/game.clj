@@ -3,10 +3,14 @@
             [ttt-clojure.cli :as cli]))
 
 (defn start [board current-player]
-  (if (board/game-over? board)
-    (if (board/tie? board)
-      (cli/report-tie current-player)
-      (cli/report-winner current-player))))
+  (let [move (cli/prompt-move board current-player)
+        new-board (board/make-move board
+                                   (:location move)
+                                   (:player move))]
+    (if (board/game-over? new-board)
+      (if (board/tie? new-board)
+        (cli/report-tie current-player)
+        (cli/report-winner current-player)))))
 
 
 
