@@ -2,6 +2,18 @@
   (:require [ttt-clojure.board :as board]
             [ttt-clojure.cli :as cli]))
 
+(defn new-game [player1 player2]
+  {:player1 player1
+   :player2 player2})
+
+(defn- find-opposite-player [game current-player]
+    (if (= (:player1 game) current-player)
+      (:player2 game)
+      (:player1 game)))
+
+(defn take-next-turn [game current-player]
+  (find-opposite-player game current-player))
+
 (defn start [board current-player]
   (let [move (cli/prompt-move board current-player)
         new-board (board/make-move board

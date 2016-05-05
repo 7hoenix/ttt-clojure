@@ -35,7 +35,13 @@
       (let [game (game/new-game "X" "O")]
       (should=
         "X"
-        (take-next-turn game "O")))))
+        (game/take-next-turn game "O"))))
+
+  (it "prompts the next player for their next move"
+      (let [game (game/new-game "X" "O")]
+      (should=
+        "O"
+        (game/take-next-turn game "X")))))
 
 
 
