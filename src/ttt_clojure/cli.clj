@@ -27,10 +27,11 @@
 (defn- str->int [s]
   (read-string s))
 
-(defn prompt-move [available-moves]
-  (let [message (str "Available moves are " available-moves)
+(defn prompt-move [available-moves current-player]
+  (let [message (str current-player "your available moves are " available-moves)
        response (str->int (get-input message))]
     (cond
-      (contains? available-moves response) response
+      (contains? available-moves response)
+        {:location response :player current-player}
       (integer? response) false
       :else (prompt-move available-moves))))

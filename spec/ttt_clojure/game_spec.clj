@@ -23,13 +23,49 @@
           (-> ["X" "X" "O"
                "O" "O" "X"
                "X" "O" "X"]
-              (game/start "O"))))
-      ))
-  ;     ; stub cli/report tie
-  ;     ; same thing
-  ;   )
+              (game/start "O"))))))
 
   ; (it "prompts the next player for their next move"
+  ;     (with-redefs [cli/prompt-move (fn [_ _]
+  ;                                     {:location 0
+  ;                                      :player "X"})]
+  ;       (should=
+  ;         "Cats game"
+  ;         (-> [" " "X" "O"
+  ;              "O" "O" "X"
+  ;              "X" "O" "X"]
+  ;             (game/start "X"))))
+  ;     ))
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   ;     ; with-redefs -> get-move
   ;     ; you were called with the correct next player
   ;   )

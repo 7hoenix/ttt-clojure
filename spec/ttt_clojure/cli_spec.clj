@@ -22,13 +22,13 @@
       (should=
         false
         (with-redefs [cli/get-input (fn [_] "3")]
-                      (cli/prompt-move [1 2 3]))))
+                      (cli/prompt-move [1 2 3] "X"))))
 
   (it "re-prompts a user if input isn't valid"
       (should=
         2
         (with-redefs [cli/get-input (fn [_] "2")]
-                      (cli/prompt-move [1 2 3]))))
+                      (:location (cli/prompt-move [1 2 3] "X")))))
 
   (it "reports winner to user"
       (should=
