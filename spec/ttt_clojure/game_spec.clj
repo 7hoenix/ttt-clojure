@@ -23,30 +23,32 @@
         (let [board ["X" "O" "X"
                      "X" "X" "O"
                      "O" "X" "O"]
-              current-player "O"
+              current-player "X"
               game (game/create-new-game board current-player "O")]
       (should=
         "Cats game"
         (game/start game current-player)))))
 
-  (it "returns nil if the game is not over yet"
-    (let [board [" " "O" "X"
-                 "X" "X" "O"
-                 "O" "X" "O"]
-          current-player "O"
-          game (game/create-new-game board current-player "O")]
-      (should=
-        nil
-        (game/start game current-player))))
-
   (it "prompts the next player for a move if game is not over yet"
-    (let [board [" " "O" "X"
-                 "X" "X" "O"
-                 " " "X" "O"]
-          current-player "O"
-          game (game/create-new-game board current-player "O")]
-      (should-invoke
-        game/get-next-move {:with [game current-player]} (game/start game current-player)))))
+    (with-redefs [cli/prompt-move (fn [_ _] {:location 0 :player "O"})]
+      (let [board [" " "O" "X"
+                   "X" "X" "O"
+                   " " "X" "O"]
+            current-player "X"
+            game (game/create-new-game board current-player "O")]
+        (should-invoke
+          game/get-next-move {:with [game current-player]} (game/start game current-player)))))
+
+  (it "gets the next move for the player that isn't the current player"
+      (with-redefs [cli/prompt-move (fn [_ _] {:location 0 :player "O"})]
+        (let [board [" " "O" "X"
+                     "X" "X" "O"
+                     " " "X" "O"]
+              current-player "X"
+              game (game/create-new-game board current-player "O")]
+          (should=
+            {:location 0 :player "O"}
+            (game/get-next-move game current-player))))))
 
 
 

@@ -17,7 +17,17 @@
 (defn- game-has-winner? [game]
   (not (board/tie? (:board game))))
 
-(defn get-next-move [game current-player])
+(defn- get-other-player [game current-player]
+  (if (= (:player1 game) current-player)
+    (:player2 game)
+    (:player1 game)))
+
+(defn get-next-move [game current-player]
+  (let [player-to-move (get-other-player game current-player)
+        next-move (cli/prompt-move
+                    (board/available-spaces (:board game))
+                      player-to-move)]
+  next-move))
 
 (defn start [game current-player]
   (if (game-over? game)
