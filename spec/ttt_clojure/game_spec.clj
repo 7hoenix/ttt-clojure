@@ -23,15 +23,19 @@
       (with-redefs [cli/report-tie (fn [_] "Cats game")
                     cli/prompt-move (fn [_ _]
                                       {:location 0
-                                       :player "X"})]
+                                       :player "O"})]
         (should=
           "Cats game"
           (-> [" " "X" "O"
                "O" "O" "X"
                "X" "O" "X"]
-              (game/start "O"))))))
+              (game/start "O")))))
 
-  ; (it "prompts the next player for their next move"
+  (it "prompts the next player for their next move"
+      (let [game (game/new-game "X" "O")]
+      (should=
+        "X"
+        (take-next-turn game "O")))))
 
 
 
