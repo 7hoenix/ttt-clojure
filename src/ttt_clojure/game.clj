@@ -2,24 +2,29 @@
   (:require [ttt-clojure.board :as board]
             [ttt-clojure.cli :as cli]))
 
-(defn new-game ([player1 player2] 
-                (new-game (board/new-board) player1 player2))
+(defn create-new-game ([player1 player2]
+                (create-new-game (board/new-board)
+                                 player1
+                                 player2))
   ([board player1 player2]
    {:board board
     :player1 player1
     :player2 player2}))
 
-(defn game-over? [game]
+(defn- game-over? [game]
   (board/game-over? (:board game)))
 
-(defn game-has-winner? [game]
+(defn- game-has-winner? [game]
   (not (board/tie? (:board game))))
 
-(defn check-for-winner [game current-player]
+(defn get-next-move [game current-player])
+
+(defn start [game current-player]
   (if (game-over? game)
     (if (game-has-winner? game)
       (cli/report-winner current-player)
-      (cli/report-tie))))
+      (cli/report-tie))
+    (get-next-move game current-player)))
 
 
 
