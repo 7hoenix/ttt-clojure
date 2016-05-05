@@ -2,6 +2,12 @@
   (:require [ttt-clojure.board :as board]
             [ttt-clojure.cli :as cli]))
 
+(defn new-game ([player1 player2] 
+                (new-game (board/new-board) player1 player2))
+  ([board player1 player2]))
+
+(defn check-for-winner [game current-player]
+  (cli/report-winner current-player))
 
 
 

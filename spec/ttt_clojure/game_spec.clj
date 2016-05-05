@@ -9,7 +9,11 @@
 
   (it "ends the game if it has a winner"
       (with-redefs [cli/report-winner (fn [_] "X wins")]
-        (let [game (game/new-game "X" "O")]
+        (let [board ["X" " " " "
+                     " " "X" " "
+                     " " " " "X"]
+              current-player "X"
+              game (game/new-game board current-player "O")]
       (should= 
         "X wins"
         (game/check-for-winner game current-player))))))
