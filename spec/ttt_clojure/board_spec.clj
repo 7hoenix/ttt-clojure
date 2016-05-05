@@ -66,5 +66,5 @@
         (-> @empty-board
             (make-moves board/x-mark [0 1 5 6 8])
             (make-moves board/o-mark [2 3 4 7])
-            (board/game-over?))))
+            (board/tie?))))
 )

@@ -3,6 +3,9 @@
             [ttt-clojure.cli :as cli]))
 
 (describe "command line interface or cli"
+  (around [it]
+          (with-out-str (it)))
+
   (it "gets input from user"
       (should=
         "y"
@@ -19,13 +22,20 @@
       (should=
         false
         (with-redefs [cli/get-input (fn [_] "3")]
-                      (cli/prompt-move [1 2 3]))))
+                      (cli/prompt-move [1 2 3] "X"))))
 
   (it "re-prompts a user if input isn't valid"
       (should=
         2
         (with-redefs [cli/get-input (fn [_] "2")]
-                      (cli/prompt-move [1 2 3])))))
+                      (:location (cli/prompt-move [1 2 3] "X")))))
 
+  (it "reports winner to user"
+      (should=
+        "X wins"
+        (cli/report-winner "X")))
 
-; UI, start a game. Human v. Human.
+  (it "reports tie"
+      (should=
+        "Cats game"
+        (cli/report-tie))))
