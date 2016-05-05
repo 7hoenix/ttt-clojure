@@ -23,25 +23,30 @@
     (:player1 game)))
 
 (defn get-next-move [game current-player]
-  (let [player-to-move (get-other-player game current-player)
-        next-move (cli/prompt-move
-                    (board/available-spaces (:board game))
-                      player-to-move)]
-  next-move))
+  (cli/prompt-move
+    (board/available-spaces (:board game))
+    current-player))
 
 (defn make-move [game move]
   (let [new-board (board/make-move
                     (:board game)
                     (:location move)
-                    (:player move))]
-    new-board))
+                    (:player move))
+        mutated-game (conj game {:board new-board})]
+    mutated-game))
 
-(defn start [game current-player]
-  (if (game-over? game)
-    (if (game-has-winner? game)
-      (cli/report-winner current-player)
-      (cli/report-tie))
-    (get-next-move game current-player)))
+(defn start
+  ([] (start (create-new-game)))
+  ([game] (start game (:player1 game)))
+  ([game current-player]
+  (loop [game game
+         current-player current-player]
+    (if (game-over? game)
+      (if (game-has-winner? game)
+        (cli/report-winner current-player)
+        (cli/report-tie))
+      (recur (make-move game (get-next-move game current-player))
+                        (get-other-player game current-player))))))
 
 
 
