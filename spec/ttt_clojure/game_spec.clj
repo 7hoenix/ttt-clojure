@@ -48,7 +48,20 @@
               game (game/create-new-game board current-player "O")]
           (should=
             {:location 0 :player "O"}
-            (game/get-next-move game current-player))))))
+            (game/get-next-move game current-player)))))
+
+  (it "makes a move on the board"
+      (let [board [" " "O" "X"
+                   "X" "X" "O"
+                   " " "X" "O"]
+            new-board [" " "O" "X"
+                       "X" "X" "O"
+                       "O" "X" "O"]
+            move {:location 6 :player "O"}
+            game (game/create-new-game board "X" "O")]
+        (should=
+          new-board
+          (game/make-move game move)))))
 
 
 

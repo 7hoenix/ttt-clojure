@@ -29,6 +29,13 @@
                       player-to-move)]
   next-move))
 
+(defn make-move [game move]
+  (let [new-board (board/make-move
+                    (:board game)
+                    (:location move)
+                    (:player move))]
+    new-board))
+
 (defn start [game current-player]
   (if (game-over? game)
     (if (game-has-winner? game)
