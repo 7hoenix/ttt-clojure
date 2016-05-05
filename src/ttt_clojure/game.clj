@@ -4,10 +4,22 @@
 
 (defn new-game ([player1 player2] 
                 (new-game (board/new-board) player1 player2))
-  ([board player1 player2]))
+  ([board player1 player2]
+   {:board board
+    :player1 player1
+    :player2 player2}))
+
+(defn game-over? [game]
+  (board/game-over? (:board game)))
+
+(defn game-has-winner? [game]
+  (not (board/tie? (:board game))))
 
 (defn check-for-winner [game current-player]
-  (cli/report-winner current-player))
+  (if (game-over? game)
+    (if (game-has-winner? game)
+      (cli/report-winner current-player)
+      (cli/report-tie))))
 
 
 

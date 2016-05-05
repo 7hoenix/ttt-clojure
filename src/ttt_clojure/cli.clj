@@ -13,7 +13,7 @@
 (defn report-winner [input]
   (report (str input " wins")))
 
-(defn report-tie [_]
+(defn report-tie []
   (report (str "Cats game")))
 
 (defn new-game []

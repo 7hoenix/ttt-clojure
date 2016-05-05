@@ -38,4 +38,4 @@
   (it "reports tie"
       (should=
         "Cats game"
-        (cli/report-tie "don't care"))))
+        (cli/report-tie))))

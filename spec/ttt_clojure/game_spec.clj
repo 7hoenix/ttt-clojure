@@ -16,7 +16,28 @@
               game (game/new-game board current-player "O")]
       (should= 
         "X wins"
-        (game/check-for-winner game current-player))))))
+        (game/check-for-winner game current-player)))))
+  
+  (it "ends the game if it has a tie"
+      (with-redefs [cli/report-tie (fn [] "Cats game")]
+        (let [board ["X" "O" "X"
+                     "X" "X" "O"
+                     "O" "X" "O"]
+              current-player "O"
+              game (game/new-game board current-player "O")]
+      (should=
+        "Cats game"
+        (game/check-for-winner game current-player)))))
+  
+  (it "returns nil if the game is not over yet"
+    (let [board [" " "O" "X"
+                 "X" "X" "O"
+                 "O" "X" "O"]
+          current-player "O"
+          game (game/new-game board current-player "O")]
+      (should=
+        nil
+        (game/check-for-winner game current-player)))))
 
 
 
