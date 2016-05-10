@@ -6,6 +6,8 @@
 
 (describe "game loop"
   (with-stubs)
+  (around [it]
+          (with-out-str (it)))
 
   (it "ends the game if it has a winner"
       (with-redefs [cli/report-winner (fn [_] "X wins")]
