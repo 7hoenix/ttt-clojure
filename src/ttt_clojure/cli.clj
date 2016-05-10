@@ -1,4 +1,5 @@
 (ns ttt-clojure.cli
+
   (:require [ttt-clojure.board :as board]
             [clojure.string :as string]))
 
@@ -16,6 +17,16 @@
 (defn report-tie []
   (report (str "Cats game")))
 
+(defn print-board [board]
+  (let [board-with-indexes (map-indexed (fn [idx item]
+      (if (= item " ")
+        idx
+        item)) board)
+        printable (apply str (apply concat
+                         (interpose ["\n"]
+                                    (partition 3 board-with-indexes))))]
+    (report printable)))
+
 (defn new-game []
   (let [message "Would you like to start a new game? (enter y or n)"
         response (get-input message)]
@@ -28,7 +39,7 @@
   (read-string s))
 
 (defn prompt-move [available-moves current-player]
-  (let [message (str current-player "your available moves are " available-moves)
+  (let [message (str current-player " your available moves are " available-moves)
        response (str->int (get-input message))]
     (cond
       (contains? available-moves response)
