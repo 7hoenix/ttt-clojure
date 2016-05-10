@@ -38,4 +38,9 @@
   (it "reports tie"
       (should=
         "Cats game"
-        (cli/report-tie))))
+        (cli/report-tie)))
+
+  (it "prints the board"
+      (should=
+        "X1O\n345\n678"
+        (cli/print-board ["X" " " "O" " " " " " " " " " " " "]))))

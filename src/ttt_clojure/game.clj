@@ -2,10 +2,12 @@
   (:require [ttt-clojure.board :as board]
             [ttt-clojure.cli :as cli]))
 
-(defn create-new-game ([player1 player2]
-                (create-new-game (board/new-board)
-                                 player1
-                                 player2))
+(defn create-new-game ([] (create-new-game "X" "O"))
+  ([player1 player2]
+   (create-new-game
+     (board/new-board)
+     player1
+     player2))
   ([board player1 player2]
    {:board board
     :player1 player1
@@ -41,6 +43,7 @@
   ([game current-player]
   (loop [game game
          current-player current-player]
+    (cli/print-board (:board game))
     (if (game-over? game)
       (if (game-has-winner? game)
         (cli/report-winner current-player)

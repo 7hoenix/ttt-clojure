@@ -20,24 +20,26 @@
   (assoc board location mark))
 
 (defn available-spaces [board]
-  (map first
+  (vec (map first
        (filter-indexed
          (fn [[idx space]] (= space available-mark))
-         board)))
+         board))))
 
 (defn valid-move? [board location]
   (= (nth board location) available-mark))
 
-(defn- sequence-wins [board potential-seq]
+(defn- sequence-wins [board potential-seq mark]
   (= potential-seq (map first
        (filter-indexed
-         (fn [[idx location]] (some #(= location %) player-marks))
+         (fn [[idx location]] (= location mark))
          board))))
 
 (defn tie? [board]
   (= (count (available-spaces board)) 0))
 
 (defn game-over? [board]
-  (or (some (fn [potential-seq] (sequence-wins board potential-seq))
+  (or (some (fn [potential-seq] (sequence-wins board potential-seq x-mark))
+            winning-seqs)
+      (some (fn [potential-seq] (sequence-wins board potential-seq o-mark))
             winning-seqs)
       (tie? board)))

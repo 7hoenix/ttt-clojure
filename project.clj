@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.7.0-RC2"]]
   :profiles {:dev {:dependencies [[speclj "3.3.1"]]}}
   :plugins [[speclj "3.3.1"]]
-  :test-paths ["spec"])
+  :test-paths ["spec"]
+  :main ttt-clojure.core)
