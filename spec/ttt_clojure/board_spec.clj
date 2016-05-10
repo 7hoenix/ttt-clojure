@@ -22,7 +22,7 @@
       (should=
         '(0 1 2 3 4 6 7 8)
         (-> @empty-board
-            (board/make-move 5 board/x-mark) 
+            (board/make-move 5 board/x-mark)
             (board/available-spaces))))
 
   (it "checks if move is valid"
@@ -46,11 +46,20 @@
             (make-moves board/x-mark [0 4 8])
             (board/game-over?))))
 
+  (it "makes sure that the sequence has to be the same symbol"
+      (should=
+        false
+        (-> @empty-board
+            (make-moves board/x-mark [0 8])
+            (board/make-move 4 board/x-mark)
+            (board/game-over?)
+            (not))))
+
   (it "knows all winning sequences"
       (should=
         board/winning-seqs
-        [[0 1 2] [3 4 5] [6 7 8] 
-         [0 3 6] [1 4 7] [2 5 8] 
+        [[0 1 2] [3 4 5] [6 7 8]
+         [0 3 6] [1 4 7] [2 5 8]
          [0 4 8] [2 4 6]]))
 
   (it "allows either player to win the game"
