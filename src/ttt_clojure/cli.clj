@@ -1,23 +1,23 @@
 (ns ttt-clojure.cli
-
   (:require [ttt-clojure.board :as board]
             [clojure.string :as string]))
 
-(defn report [message]
-  (println message)
+(defn report [disp-func message]
+  (disp-func message)
   message)
 
-(defn get-input [question]
-  (report question)
-  (string/trim (string/lower-case (read-line))))
+(defn prompt [disp-func prompt-func question]
+  (report disp-func question)
+  (string/trim (string/lower-case (prompt-func))))
 
-(defn report-winner [input]
-  (report (str input " wins")))
+(defn report-winner [disp-func input]
+  (report disp-func
+          (str input " wins")))
 
-(defn report-tie []
-  (report (str "Cats game")))
+(defn report-tie [disp-func _]
+  (report disp-func (str "Cats game")))
 
-(defn print-board [board]
+(defn print-board [disp-func board]
   (let [board-with-indexes (map-indexed (fn [idx item]
       (if (= item " ")
         idx
@@ -25,24 +25,31 @@
         printable (apply str (apply concat
                          (interpose ["\n"]
                                     (partition 3 board-with-indexes))))]
-    (report printable)))
+    (report disp-func printable)))
 
-(defn new-game []
+(defn new-game [disp-func prompt-func]
   (let [message "Would you like to start a new game? (enter y or n)"
-        response (get-input message)]
+        response (prompt disp-func prompt-func message)]
     (cond
       (or (= response "y") (= response "yes")) true
       (or (= response "n") (= response "no")) false
-      :else (new-game))))
+      :else (new-game disp-func prompt-func))))
 
 (defn- str->int [s]
-  (read-string s))
+  (Integer. s))
 
-(defn prompt-move [available-moves current-player]
+(defn- response-is-available? [available response]
+  (some #(= response %) available))
+
+(defn prompt-move [disp-func
+                   prompt-func
+                   available-moves
+                   current-player]
   (let [message (str current-player " your available moves are " available-moves)
-       response (str->int (get-input message))]
-    (cond
-      (contains? available-moves response)
-        {:location response :player current-player}
-      (integer? response) false
-      :else (prompt-move available-moves))))
+       response (str->int (prompt disp-func prompt-func message))]
+    (if (response-is-available? available-moves response)
+          {:location response :player current-player}
+          (prompt-move disp-func
+                   prompt-func
+                   available-moves
+                   current-player))))
