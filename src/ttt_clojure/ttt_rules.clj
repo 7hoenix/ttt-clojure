@@ -15,9 +15,9 @@
 
 (defn- check-seq [board potential-seq mark]
   (every? (set (map first
-       (filter-indexed
-         (fn [[idx location]] (is-occupied? mark location))
-         board)))
+    (filter-indexed
+       (fn [[idx location]] (is-occupied? mark location))
+       board)))
           potential-seq))
 
 (defn is-tie? [available-spaces]
