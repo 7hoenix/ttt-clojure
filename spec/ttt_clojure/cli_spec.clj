@@ -40,6 +40,6 @@
 
   (it "prints the board"
       (should=
-        "X1O\n345\n678"
+        "X | 1 | O\n---------\n3 | 4 | 5\n---------\n6 | 7 | 8"
         (cli/print-board @printer
                          ["X" " " "O" " " " " " " " " " " " "]))))

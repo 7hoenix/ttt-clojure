@@ -17,14 +17,30 @@
 (defn report-tie [disp-func _]
   (report disp-func (str "Cats game")))
 
+(defn- clear-screen []
+  (print (str (char 27) "[2J"))
+  (print (str (char 27) "[;H")))
+
+(defn- prepare-row [row]
+  (apply str (interpose " | " row)))
+
+(defn- prepare-board [board]
+  (let [rows (partition 3 board)
+        top (prepare-row (first rows))
+        middle (prepare-row (second rows))
+        bottom (prepare-row (last rows))
+        blank (apply str (repeat 9 "-"))
+        together (string/join "\n" [top blank middle blank bottom])]
+    together))
+
 (defn print-board [disp-func board]
+  (clear-screen)
   (let [board-with-indexes (map-indexed (fn [idx item]
-      (if (= item " ")
-        idx
-        item)) board)
-        printable (apply str (apply concat
-                         (interpose ["\n"]
-                                    (partition 3 board-with-indexes))))]
+                                          (if (= item " ")
+                                            idx
+                                            item))
+                                        board)
+        printable (prepare-board board-with-indexes)]
     (report disp-func printable)))
 
 (defn new-game [disp-func prompt-func]
