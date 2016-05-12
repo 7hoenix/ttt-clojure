@@ -3,43 +3,26 @@
 (def available-mark " ")
 (def x-mark "X")
 (def o-mark "O")
-(def player-marks [x-mark o-mark])
-(def winning-seqs [[0 1 2] [3 4 5] [6 7 8]
-                   [0 3 6] [1 4 7] [2 5 8]
-                   [0 4 8] [2 4 6]])
 
 (defn- filter-indexed [f coll]
   (filter f (map-indexed (fn [a b] [a b]) coll)))
 
 (defn new-board []
   (vec (map
-         (fn [x] available-mark)
+         (fn [_] available-mark)
          (range 9))))
 
 (defn make-move [board location mark]
   (assoc board location mark))
 
+(defn- is-available? [space]
+  (= available-mark space))
+
+(defn- is-occupied? [mark location]
+  (= mark location))
+
 (defn available-spaces [board]
   (vec (map first
        (filter-indexed
-         (fn [[idx space]] (= space available-mark))
+         (fn [[idx space]] (is-available? space))
          board))))
-
-(defn valid-move? [board location]
-  (= (nth board location) available-mark))
-
-(defn- sequence-wins [board potential-seq mark]
-  (= potential-seq (map first
-       (filter-indexed
-         (fn [[idx location]] (= location mark))
-         board))))
-
-(defn tie? [board]
-  (= (count (available-spaces board)) 0))
-
-(defn game-over? [board]
-  (or (some (fn [potential-seq] (sequence-wins board potential-seq x-mark))
-            winning-seqs)
-      (some (fn [potential-seq] (sequence-wins board potential-seq o-mark))
-            winning-seqs)
-      (tie? board)))
