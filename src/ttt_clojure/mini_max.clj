@@ -1,4 +1,9 @@
-(ns ttt-clojure.mini-max)
+(ns ttt-clojure.mini-max
+  (:require [ttt-clojure.game :as game]
+            [ttt-clojure.board :as board]))
 
 (defn calculate [game player]
-  8)
+  (let [board (:board game)
+        available (board/available-spaces board)
+        next (first available)]
+    next))
