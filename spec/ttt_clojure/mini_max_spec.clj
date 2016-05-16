@@ -20,4 +20,13 @@
             game (game/create-new-game board "X" "O")]
       (should=
                2
-               (mm/calculate game "X")))))
+               (mm/calculate game "X"))))
+
+  (it "chooses the winning move if two are available"
+      (let [board ["O" "O" "X"
+                   "X" "X" " "
+                   " " "O" "O"]
+            game (game/create-new-game board "X" "O")]
+      (should=
+               6
+               (mm/calculate game "O")))))
