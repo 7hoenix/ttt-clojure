@@ -23,7 +23,7 @@
     (not (ttt/is-tie?
            (board/available-spaces (:board game)))))
 
-(defn- get-other-player [game current-player]
+(defn get-other-player [game current-player]
   (if (= (:player1 game) current-player)
     (:player2 game)
     (:player1 game)))
