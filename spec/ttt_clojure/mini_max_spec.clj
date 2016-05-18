@@ -3,7 +3,67 @@
             [ttt-clojure.mini-max :as mm]
             [ttt-clojure.game :as game]))
 
-(describe "minimax")
+(describe "minimax"
+  (it "chooses a forcing move"
+    ; (let [board [" " "X" " "
+    ;              "O" "O" "X"
+    ;              "X" "O" " "]]
+    (let [board [" " "X" "O"
+                 " " " " "X"
+                 " " " " "X"]]
+      (should=
+               2
+               (mm/minimax board "X" "O")))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   ; (it "returns the next viable move"
   ;     (let [board ["X" "X" "O"
   ;                  "O" "X" "O"
@@ -33,13 +93,6 @@
   ;                            invoking-player
   ;                            other-player))))
 
-  ; (it "chooses a forcing move"
-  ;     (let [board [" " "X" " "
-  ;                  "O" "O" "X"
-  ;                  "X" "O" " "]]
-  ;     (should=
-  ;              2
-  ;              (mm/calculate board "X" "O")))))
 
 ; (describe "score"
 ;   (it "returns 10 for a win this turn"
