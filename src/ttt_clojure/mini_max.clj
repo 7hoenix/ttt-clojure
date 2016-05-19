@@ -8,11 +8,11 @@
   (ttt/game-is-over? board
                      (board/available-spaces board)))
 
-(defn score [board current-player]
+(defn score [board current-player depth]
   (if (ttt/winner board)
     (if (= ttt/winner current-player)
-      10
-      -10)
+      (- 10 depth)
+      (+ depth -10))
     0))
 
 (defn best-score [tree current-player]
@@ -26,9 +26,9 @@
                 comparison)))
           tree))
 
-(defn- mm-algorithm [board current-player opponent-player location multiplier]
+(defn- mm-algorithm [board current-player opponent-player location multiplier depth]
    (if (game-over? board)
-     (vector location (* multiplier (score board current-player)))
+     (vector location (* multiplier (score board current-player depth)))
      (let [available (board/available-spaces board)
            states (map (fn [spot]
                          (vector spot
@@ -41,13 +41,14 @@
                                          current-player
                                          opponent-player
                                          location
-                                         multiplier)))
+                                         multiplier
+                                         depth)))
                         []
                         states)]
        (best-score tree current-player))))
 
-(defn minimax [board current-player opponent-player]
-  (first (mm-algorithm board current-player opponent-player nil 1)))
+(defn maxi [board current-player opponent-player location multiplier depth]
+  (mm-algorithm board opponent-player current-player location (* -1 multiplier) (+ 1 depth)))
 
-(defn maxi [board current-player opponent-player location multiplier]
-  (mm-algorithm board opponent-player current-player location (* -1 multiplier)))
+(defn minimax [board current-player opponent-player]
+  (first (mm-algorithm board current-player opponent-player nil 1 0)))
