@@ -16,9 +16,7 @@
     0))
 
 (defn best-score [tree current-player]
-  ; (println (str "basic tree" tree " current-player " current-player))
   (reduce (fn [itm comparison]
-      ; (println (str "itm " itm " comparison " comparison))
             (if (empty? itm)
               comparison
               (if (< (second comparison) (second itm))
@@ -51,4 +49,4 @@
   (mm-algorithm board opponent-player current-player location (* -1 multiplier) (+ 1 depth)))
 
 (defn minimax [board current-player opponent-player]
-  (first (mm-algorithm board current-player opponent-player nil 1 0)))
+  (first (mm-algorithm board current-player opponent-player nil -1 0)))

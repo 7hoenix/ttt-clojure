@@ -9,7 +9,7 @@
                    "X" "O" " "]]
         (should=
                 2
-                (mm/minimax board "X" "O"))))
+                (mm/minimax board "O" "X"))))
 
   (it "correctly figures out a different move"
       (let [board [" " "X" " "
