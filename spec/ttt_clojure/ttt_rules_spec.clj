@@ -46,4 +46,12 @@
             available-spaces []]
         (should=
           true
-          (ttt/game-is-over? board available-spaces)))))
+          (ttt/game-is-over? board available-spaces))))
+
+  (it "returns the winner"
+    (let [board [" " "O" "X"
+                 "O" "X" "O"
+                 "X" "X" "O"]]
+      (should=
+        "X"
+        (ttt/winner board)))))

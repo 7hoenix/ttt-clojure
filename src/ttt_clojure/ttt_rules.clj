@@ -29,6 +29,12 @@
                                        mark))
         winning-seqs))
 
+(defn winner [board]
+  (cond
+    (check-seqs board x-mark) x-mark
+    (check-seqs board o-mark) o-mark
+    :else false))
+
 (defn game-is-over? [board available-spaces]
   (or (some #(check-seqs board %) player-marks)
       (is-tie? available-spaces)))

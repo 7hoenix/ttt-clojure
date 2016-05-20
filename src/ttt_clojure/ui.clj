@@ -60,16 +60,16 @@
   (some #(= response %) available))
 
 (defn prompt-move ([] (prompt-move println read-line))
-  ([available player] (prompt-move println
+  ([available current-player] (prompt-move println
                                      read-line
                                      available
-                                     player))
-  ([disp-func prompt-func available player]
-   (let [message (str player " your available moves are " available)
+                                     current-player))
+  ([disp-func prompt-func available current-player]
+   (let [message (str current-player " your available moves are " available)
          response (str->int (prompt disp-func prompt-func message))]
     (if (response-is-available? available response)
-          {:location response :player player}
+          {:location response :player current-player}
           (prompt-move disp-func
                        prompt-func
                        available
-                       player)))))
+                       current-player)))))
