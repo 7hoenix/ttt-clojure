@@ -1,8 +1,12 @@
 (ns ttt-clojure.core
   (:require [ttt-clojure.game :as game]
-            [ttt-clojure.ui :as ui])
+            [ttt-clojure.cli :as cli]
+            [ttt-clojure.ai :as ai])
   (:gen-class))
 
 (defn -main []
-  (if (ui/new-game)
-    (game/start)))
+  (cli/new-game)
+    (let [player1 (cli/create-cli "X" "O")
+          player2 (ai/create-ai "O" "X")
+          game (game/create-new-game player1 player2)]
+    (game/start game)))
