@@ -54,4 +54,20 @@
                  "X" "X" "O"]]
       (should=
         "X"
-        (ttt/winner board)))))
+        (ttt/winner board))))
+
+  (it "returns the count of a players advantage"
+    (let [board [" " "O" "X"
+                 " " " " "O"
+                 "X" "X" "O"]]
+      (should=
+              1
+              (ttt/advantage-count board "X"))))
+
+  (it "returns two count if you got it"
+    (let [board [" " "O" "X"
+                 " " " " "O"
+                 "X" "X" " "]]
+      (should=
+              2
+              (ttt/advantage-count board "X")))))
