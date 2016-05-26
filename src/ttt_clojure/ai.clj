@@ -3,9 +3,9 @@
             [ttt-clojure.player :as player]))
 
 (defn minimax [board current-player opponent-player]
-  {:location (mm/minimax board
-                         current-player
-                         opponent-player)
+  {:location (mm/get-minimax-move board
+                                  current-player
+                                  opponent-player)
    :player current-player})
 
 (defrecord AI [mark opponent-mark]

@@ -1,3 +1,25 @@
 (ns ttt-clojure.mini-max
   (:require [ttt-clojure.board :as board]
-            [ttt-clojure.ttt-rules :as ttt]))
+            [ttt-clojure.ttt-rules :as ttt]
+            [ttt-clojure.cli :as cli]))
+
+(declare minimax get-best-score)
+
+(defn analyze [board depth player opponent]
+  (cond
+    (= (ttt/winner board) player) (- 10 depth)
+    (= (ttt/winner board) opponent) (- depth 10)
+    :else 0))
+
+(defn minimax [board depth player opponent location]
+  (let [updated-board (board/make-move board location player)]
+    (if (ttt/game-is-over? updated-board
+                           (board/available-spaces updated-board))
+      [(analyze updated-board depth player opponent) location]
+      [(* -1 (first (get-best-score updated-board (+ 1 depth) opponent player))) location])))
+
+(defn get-best-score [board depth player opponent]
+  (apply max-key first (map (partial minimax board depth player opponent) (board/available-spaces board))))
+
+(defn get-minimax-move [board player opponent]
+  (second (get-best-score board 0 player opponent)))
