@@ -30,7 +30,7 @@
     together))
 
 (defn print-board [board print-func]
-  ; (clear-screen)
+  (clear-screen)
   (let [board-with-indexes (map-indexed (fn [idx item]
                                           (if (= item " ")
                                             idx
