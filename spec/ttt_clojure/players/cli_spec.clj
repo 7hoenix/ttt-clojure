@@ -1,6 +1,6 @@
-(ns ttt-clojure.cli-spec
+(ns ttt-clojure.players.cli-spec
   (:require [speclj.core :refer :all]
-            [ttt-clojure.cli :as cli]))
+            [ttt-clojure.players.cli :as cli]))
 
 (describe "Command Line Interface"
   (around [it]
