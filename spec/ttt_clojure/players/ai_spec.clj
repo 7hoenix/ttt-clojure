@@ -1,6 +1,6 @@
-(ns ttt-clojure.ai-spec
+(ns ttt-clojure.players.ai-spec
   (:require [speclj.core :refer :all]
-            [ttt-clojure.ai :as ai]
+            [ttt-clojure.players.ai :as ai]
             [ttt-clojure.ttt-rules :as ttt]
             [ttt-clojure.game :as game]))
 
