@@ -1,52 +1,38 @@
 (ns ttt-clojure.mini-max
   (:require [ttt-clojure.board :as board]
-            [ttt-clojure.ttt-rules :as ttt]))
+            [ttt-clojure.ttt-rules :as ttt]
+            [ttt-clojure.cli :as cli]))
 
-(declare minimax maxi)
+(declare minimax get-best-score)
 
-(defn- game-over? [board]
-  (ttt/game-is-over? board
-                     (board/available-spaces board)))
-
-(defn score [board current-player depth]
-  (if (ttt/winner board)
-    (if (= ttt/winner current-player)
-      (- 10 depth)
-      (+ depth -10))
+(defn score-complete-board [board depth player opponent]
+  (condp = (ttt/winner board)
+    player (- 10 depth)
+    opponent (- depth 10)
     0))
 
-(defn best-score [tree current-player]
-  (reduce (fn [itm comparison]
-            (if (empty? itm)
-              comparison
-              (if (< (second comparison) (second itm))
-                itm
-                comparison)))
-          tree))
+(defn score-incomplete-board [board player opponent]
+    (let [player-adv-count (ttt/advantage-count board player)
+          opponent-adv-count (ttt/advantage-count board opponent)]
+      (- (* player-adv-count 0.5) (* opponent-adv-count 0.5))))
 
-(defn- mm-algorithm [board current-player opponent-player location multiplier depth]
-   (if (game-over? board)
-     (vector location (* multiplier (score board current-player depth)))
-     (let [available (board/available-spaces board)
-           states (map (fn [spot]
-                         (vector spot
-                                (board/make-move board
-                                                 spot
-                                                 current-player)))
-                       available)
-           tree (reduce (fn [bb [location board]]
-                          (conj bb (maxi board
-                                         current-player
-                                         opponent-player
-                                         location
-                                         multiplier
-                                         depth)))
-                        []
-                        states)]
-       (best-score tree current-player))))
+(defn analyze [board depth player opponent]
+  (if (ttt/game-is-over? board
+                         (board/available-spaces board))
+    (score-complete-board board depth player opponent)
+    (score-incomplete-board board player opponent)))
 
-(defn maxi [board current-player opponent-player location multiplier depth]
-  (mm-algorithm board opponent-player current-player location (* -1 multiplier) (+ 1 depth)))
+(defn minimax [board depth player opponent location]
+  (let [updated-board (board/make-move board location player)]
+    (if (or (> depth 2) (ttt/game-is-over? updated-board
+                           (board/available-spaces updated-board)))
+      [(analyze updated-board depth player opponent) location]
+      [(* -1 (first (get-best-score updated-board (+ 1 depth) opponent player))) location])))
 
-(defn minimax [board current-player opponent-player]
-  (first (mm-algorithm board current-player opponent-player nil -1 0)))
+(defn get-best-score [board depth player opponent]
+  (apply max-key first (map
+                         (partial minimax board depth player opponent)
+                         (board/available-spaces board))))
+
+(defn get-minimax-move [board player opponent]
+  (second (get-best-score board 0 player opponent)))

@@ -13,12 +13,21 @@
 (defn- is-occupied? [mark location]
   (= mark location))
 
+(defn- is-blank? [_ location]
+  (= location " "))
+
 (defn- check-seq [board potential-seq mark]
   (every? (set (map first
     (filter-indexed
        (fn [[idx location]] (is-occupied? mark location))
        board)))
           potential-seq))
+
+(defn- count-idxs [board potential-seq mark count-func]
+  (let [indexed (filter-indexed (fn [[idx location]] (count-func mark location))
+                  board)
+        matches (for [[idx location] indexed :when (some #(= idx %) potential-seq)] idx)]
+    (count matches)))
 
 (defn is-tie? [available-spaces]
   (= (count available-spaces) 0))
@@ -28,6 +37,13 @@
                                        potential-seq
                                        mark))
         winning-seqs))
+
+(defn- check-seq-advantage [board potential-seq mark]
+  (and (= 2 (count-idxs board potential-seq mark is-occupied?))
+       (= 1 (count-idxs board potential-seq mark is-blank?))))
+
+(defn advantage-count [board mark]
+  (count (filter true? (map #(check-seq-advantage board % mark) winning-seqs))))
 
 (defn winner [board]
   (cond
