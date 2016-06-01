@@ -1,7 +1,7 @@
 (ns ttt-clojure.core
   (:require [ttt-clojure.game :as game]
-            [ttt-clojure.cli :as cli]
-            [ttt-clojure.ai :as ai])
+            [ttt-clojure.players.cli :as cli]
+            [ttt-clojure.players.ai :as ai])
   (:gen-class))
 
 (defn -main []

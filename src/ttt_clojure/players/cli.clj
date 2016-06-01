@@ -1,4 +1,4 @@
-(ns ttt-clojure.cli
+(ns ttt-clojure.players.cli
   (:require [ttt-clojure.player :as player]
             [ttt-clojure.board :as board]
             [clojure.string :as string]))

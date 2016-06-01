@@ -1,7 +1,6 @@
 (ns ttt-clojure.mini-max
   (:require [ttt-clojure.board :as board]
-            [ttt-clojure.ttt-rules :as ttt]
-            [ttt-clojure.cli :as cli]))
+            [ttt-clojure.ttt-rules :as ttt]))
 
 (declare minimax get-best-score)
 

@@ -1,7 +1,7 @@
 (ns ttt-clojure.game-spec
   (:require [speclj.core :refer :all]
             [ttt-clojure.game :as game]
-            [ttt-clojure.cli :as cli]
+            [ttt-clojure.players.cli :as cli]
             [ttt-clojure.ttt-rules :as ttt]
             [ttt-clojure.board :as board]))
 
