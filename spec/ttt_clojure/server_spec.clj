@@ -24,11 +24,11 @@
                             (:body (server/app (mock/request :post "/games")))
                             2))))))
 
-; (describe "GET /games/1"
-;           (it "should display the game with id of 1"
-;               (let [player1 (web/create-web "X" "O")
-;                     player2 (ai/create-ai "O" "X")
-;                     game (server/app (mock/request :post "/games"))]
-;                 (should=
-;                         1
-;                         (:id (:body (server/app (mock/request :get "/games/1"))))))))
+(describe "GET /games/1"
+          (it "should display the game with id of 1"
+              (let [game (server/app (mock/request :post "/games"))]
+                (should=
+                        [" " " " " " " " " " " " " " " " " "]
+                        (:board (get
+                                  (:body (server/app (mock/request :get "/games/1")))
+                                  1))))))

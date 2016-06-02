@@ -1,6 +1,7 @@
 (ns ttt-clojure.server
   (:require [ttt-clojure.game :as game]
             [ttt-clojure.players.ai :as ai]
+            [ring.mock.request :as mock]
             [ttt-clojure.players.web :as web]))
 
 (def create-players
@@ -27,8 +28,21 @@
                       (:player2 players)))]
     game))
 
+(defn new-game []
+  {:body "Would you like to start a new game?"})
+
+(defn str->int [s]
+  (Integer. s))
+
+(defn show [uri]
+  (let [id (str->int (re-find #"\d+" uri))
+        game (get @games id)]
+  {:body {id game}}))
+
 (defn respond-to-get [uri & more]
-  {:body "start a new game?"})
+  (condp = (re-find #"\D+" uri)
+    "/games/" (show uri)
+    "/" (new-game)))
 
 (defn respond-to-post [uri & more]
   {:body (create-game)})
