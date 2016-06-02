@@ -1,8 +1,9 @@
 (ns ttt-clojure.server
   (:require [ttt-clojure.game :as game]
             [ttt-clojure.players.ai :as ai]
+            [ttt-clojure.players.web :as web]
             [ring.mock.request :as mock]
-            [ttt-clojure.players.web :as web]))
+            [ring.middleware.params :as params]))
 
 (def create-players
   {:player1 (web/create-web "X" "O")
@@ -28,29 +29,49 @@
                       (:player2 players)))]
     game))
 
-(defn new-game []
-  {:body "Would you like to start a new game?"})
 
 (defn str->int [s]
   (Integer. s))
 
+(defn- get-id [uri]
+   (str->int (re-find #"\d+" uri)))
+
 (defn show [uri]
-  (let [id (str->int (re-find #"\d+" uri))
+  (let [id (get-id uri)
         game (get @games id)]
   {:body {id game}}))
+
+(defn make-move [uri more]
+  (let [id (get-id uri)
+        game (get @games id)
+        move {:location (str->int (get (first more) "spot"))
+              :player (get (first more) "symbol")}
+        updated-game (game/make-move game move)]
+    (swap! games assoc
+           id
+           updated-game)))
+
+(defn new-game []
+  {:body "Would you like to start a new game?"})
 
 (defn respond-to-get [uri & more]
   (condp = (re-find #"\D+" uri)
     "/games/" (show uri)
     "/" (new-game)))
 
+(defn respond-to-put [uri & more]
+  {:body (make-move uri more)})
+
 (defn respond-to-post [uri & more]
   {:body (create-game)})
 
 (defn handler [request]
+  ; (println request)
   (condp = (:request-method request)
     :get (respond-to-get (:uri request))
-    :post (respond-to-post (:uri request))))
+    :post (respond-to-post (:uri request))
+    :put (respond-to-put (:uri request) (:params request))))
 
 (def app
-  (-> handler))
+  (-> handler
+      (params/wrap-params)))
