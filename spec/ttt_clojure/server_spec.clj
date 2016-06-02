@@ -17,19 +17,18 @@
 
 (describe "POST /games"
           (it "returns a newly created game"
-              (let [board [" " " " " " " " " " " " " " " " " "]
-                    player1 (web/create-web "X" "O")
-                    player2 (ai/create-ai "O" "X")]
+              (let [game1 (server/app (mock/request :post "/games"))]
                 (should=
-                        board
-                        (:board (:body (server/app (mock/request :post "/games"))))))))
+                  [" " " " " " " " " " " " " " " " " "]
+                  (:board (get
+                            (:body (server/app (mock/request :post "/games")))
+                            2))))))
 
-; (describe "GET games/1"
+; (describe "GET /games/1"
 ;           (it "should display the game with id of 1"
-;               (let [board [" " " " " " " " " " " " " " " " " "]
-;                     player1 (web/create-web "X" "O")
+;               (let [player1 (web/create-web "X" "O")
 ;                     player2 (ai/create-ai "O" "X")
-;                     game (game/create-new-game player1 player2)]
+;                     game (server/app (mock/request :post "/games"))]
 ;                 (should=
-;                         board
-;                         (:board (:body (server/app (mock/request :get "games/1"))))))))
+;                         1
+;                         (:id (:body (server/app (mock/request :get "/games/1"))))))))
