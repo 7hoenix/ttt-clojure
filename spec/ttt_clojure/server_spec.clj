@@ -7,12 +7,11 @@
             [clojure.string :as string]
             [ring.mock.request :as mock]))
 
-(defn reset-games []
-  (reset! server/games {}))
-
 (describe "GET /new-game"
+          (around [it]
+                  (with-out-str (it)))
+
           (it "displays a message to start a new game"
-              (reset-games)
               (should=
                 true
                 (string/includes?
@@ -21,31 +20,22 @@
 
 (describe "POST /games"
           (it "returns a newly created game"
-              (reset-games)
               (let [game1 (server/app (mock/request :post "/games"))]
                 (should=
-                  [" " " " " " " " " " " " " " " " " "]
-                  (:board (get
-                            (:body (server/app (mock/request :post "/games")))
-                            2))))))
+                  200
+                  (:status (server/app (mock/request :post "/games")))))))
 
 (describe "GET /games/1"
           (it "should display the game with id of 1"
-              (reset-games)
               (let [game (server/app (mock/request :post "/games"))]
                 (should=
-                        [" " " " " " " " " " " " " " " " " "]
-                        (:board (get
-                                  (:body (server/app (mock/request :get "/games/1")))
-                                  1))))))
+                  200
+                  (:status (server/app (mock/request :get "/games/1")))))))
 
 (describe "PUT /games/1?symbol=X&spot=0"
           (it "should return a board for game 1 with a move shown"
-              (reset-games)
               (let [game (server/app (mock/request :post "/games"))]
-                (server/app (mock/request :put "/games/1?symbol=X&spot=0"))
+                (server/app (mock/request :put "/games/1?player=X&location=0"))
                 (should=
-                        ["X" " " " " " " " " " " " " " " " "]
-                        (:board (get
-                                  (:body (server/app (mock/request :get "/games/1")))
-                                  1))))))
+                  200
+                  (:status (server/app (mock/request :get "/games/1")))))))

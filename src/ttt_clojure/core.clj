@@ -1,5 +1,6 @@
 (ns ttt-clojure.core
   (:require [ttt-clojure.game :as game]
+            [ttt-clojure.server :as server]
             [ttt-clojure.players.cli :as cli]
             [ttt-clojure.players.ai :as ai])
   (:gen-class))
