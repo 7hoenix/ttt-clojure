@@ -1,5 +1,6 @@
 (ns ttt-clojure.game-storage
   (:require [ttt-clojure.game :as game]
+            [ttt-clojure.board :as board]
             [ttt-clojure.players.ai :as ai]
             [ttt-clojure.players.web :as web]))
 
@@ -47,3 +48,8 @@
         updated-game (game/make-move game move)]
     (update-game id updated-game)
     updated-game))
+
+(defn available-moves [id]
+  (let [game (game id)
+        moves (board/available-spaces (:board game))]
+    moves))
