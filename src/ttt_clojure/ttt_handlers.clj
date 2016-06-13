@@ -1,5 +1,5 @@
 (ns ttt-clojure.ttt-handlers
-  (:require [ring.util.response :as response]
+  (:require [ttt-clojure.util.http :as http]
             [ttt-clojure.views.layout :as layout]
             [ttt-clojure.views.contents :as contents]
             [ttt-clojure.game-storage :as store]
@@ -12,64 +12,49 @@
   (str->int (re-find #"\d+" (:uri req))))
 
 (defn- get-move [request]
-  (println (get-in request [:params "location"]))
-  (println (get-in request [:params "player"]))
   {:location (str->int (get-in request [:params "location"]))
    :player (get-in request [:params "player"])})
 
-(def basic-response
-  {:status 200
-   :headers {"Content-Type" "text/html"}})
+(defn- render-game [id game]
+  (let [available-moves (board/available-spaces (:board game))]
+    (layout/application "Show"
+                        (contents/show id
+                                       game
+                                       available-moves))))
 
-(def not-found
-  {:status 404
-   :headers {"Content-Type" "text/html"}
-   :body (layout/application "Not Found" (contents/not-found))})
-
-(defn make-new-game [funcs]
+(defn make-new-game [repo]
   (fn [request]
-    (merge basic-response
-           {:body (layout/application "home"
-                                      (contents/index))})))
+    (http/basic-response (layout/application "home"
+                                             (contents/index)))))
 
-(defn make-create-game [funcs]
+(defn make-create-game [repo]
   (fn [request]
-    ((:create-game funcs))
-    (let [games (deref (:games funcs))
-          id (:current-index games)]
-      (response/redirect (str "/games/" id)))))
+    (let [{:keys [id game]} (store/create-game repo)]
+      (http/redirect (render-game id game) id))))
 
-(defn make-show-game [funcs]
+(defn make-show-game [repo]
   (fn [request]
     (let [id (get-id request)
-          game ((:show-game funcs) id)
+          game (store/show-game repo id)
           available-moves (board/available-spaces (:board game))]
-      (if (not (empty? game))
-        (merge basic-response
-               {:body (layout/application "show"
-                                          (contents/show id
-                                                         game
-                                                         available-moves))})
-        not-found))))
+      (if-not (empty? game)
+        (http/basic-response (render-game id game))
+        (http/not-found (layout/application "Not Found" (contents/not-found)))))))
 
-(defn make-update-game [funcs]
+(defn make-update-game [repo]
   (fn [request]
     (let [id (get-id request)
+          game (store/show-game repo id)
           move (get-move request)]
-      ((:update-game funcs) id move)
-      (response/redirect (str "/games/" id)))))
-
-(def game-funcs
-  {:games store/games
-   :create-game store/create-game
-   :show-game store/game
-   :update-game store/make-move})
+      (store/make-move repo id move)
+      (http/redirect (render-game id game) id))))
 
 (def handlers
-  {:get
-   {"/" (make-new-game game-funcs)
-    "/games/" (make-show-game game-funcs)
-    "/favicon.ico" (println "cake")}
-   :post
-   {"/games" (make-create-game game-funcs)
-    "/games/" (make-update-game game-funcs)}})
+  (let [game-repo (store/create-atom-game-repo)]
+    {:get
+     {"/" (make-new-game game-repo)
+      "/games/" (make-show-game game-repo)
+      "/favicon.ico" (println "cake")}
+     :post
+     {"/games" (make-create-game game-repo)
+      "/games/" (make-update-game game-repo)}}))

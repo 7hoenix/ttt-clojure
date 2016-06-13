@@ -1,10 +1,10 @@
-(ns ttt-clojure.server
-  (:require [ttt-clojure.ttt-handlers :as handlers]
+(ns ttt-clojure.ring-adapter
+  (:require [ttt-clojure.ttt-handlers :as h]
             [ring.util.response :as response]
             [ring.middleware.reload :as reload]
             [ring.middleware.params :as params]))
 
-(defn get-route [uri]
+(defn- get-route [uri]
   (re-find #"\D+" uri))
 
 (defn wrap-route [handler]
@@ -14,8 +14,7 @@
 
 (def get-my-handler
   (fn [request]
-    (println request)
-    ((get-in handlers/handlers
+    ((get-in h/handlers
             [(:request-method request)
              (:route request)])
     request)))
