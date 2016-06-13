@@ -54,7 +54,7 @@
     {:get
      {"/" (make-new-game game-repo)
       "/games/" (make-show-game game-repo)
-      "/favicon.ico" (println "cake")}
+      "/favicon.ico" (fn [request] (println "cake"))}
      :post
      {"/games" (make-create-game game-repo)
       "/games/" (make-update-game game-repo)}}))
