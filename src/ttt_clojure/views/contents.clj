@@ -47,11 +47,13 @@
                   (form/hidden-field "player" "X")
                   (form/submit-button {:class "btn btn-primary"}
                                       "Choose move"))])
-  ([id game _ winner]
+  ([id game _ outcome]
    [:div#game
     [:h1.game-show (str "Game: " id)]
     [:p (display-board (:board game))]
-    [:p (str "Game over " winner " wins")]
+    (if outcome
+      [:p (str "Game over " outcome " wins")]
+      [:p (str "Game over cats game")])
     [:h3.header "Would you like to play again?"]
     (form/form-to [:post "/games"]
                   (form/submit-button {:class "btn btn-primary"}

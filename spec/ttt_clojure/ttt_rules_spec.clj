@@ -43,10 +43,10 @@
           true
           (ttt/game-is-over? game))))
 
-  (it "returns the winner"
-    (let [board [" " "O" "X"
-                 "O" "X" "O"
-                 "X" "X" "O"]]
+  (it "returns the outcome of the game"
+      (let [game {:board [" " "O" "X"
+                          "O" "X" "O"
+                          "X" "X" "O"]}]
       (should=
         "X"
-        (ttt/winner board)))))
+        (ttt/outcome game)))))

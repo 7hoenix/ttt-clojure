@@ -5,7 +5,7 @@
 (declare minimax get-best-score)
 
 (defn score-complete-board [board depth player opponent]
-  (condp = (ttt/winner board)
+  (condp = (ttt/outcome {:board board})
     player (- 10 depth)
     opponent (- depth 10)
     0))

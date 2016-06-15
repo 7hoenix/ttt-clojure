@@ -10,9 +10,9 @@
           (with-out-str (it)))
 
   (it "can play against itself"
-    (let [game (basic-game/create-new-game (ai/create-ai "X" "O")
-                                     (ai/create-ai "O" "X"))
-          end-board (game/run game)]
-      (should=
-              false
-              (ttt/winner end-board)))))
+      (let [game (basic-game/create-new-game (ai/create-ai "X" "O")
+                                             (ai/create-ai "O" "X"))
+            end-game (game/run game)]
+        (should=
+          false
+          (ttt/outcome end-game)))))

@@ -3,11 +3,7 @@
             [ttt-clojure.cli.game :as game]
             [ttt-clojure.basic-game :as basic-game]
             [ttt-clojure.players.cli :as cli]
-            [ttt-clojure.ttt-rules :as ttt]
-            [ttt-clojure.board :as board]))
-
-(defn- check-winner [board]
-  (ttt/winner board))
+            [ttt-clojure.ttt-rules :as ttt]))
 
 (describe "game loop"
   (around [it]
@@ -24,7 +20,7 @@
                                          opponent)]
       (should=
         "X"
-        (check-winner (game/run game)))))
+        (ttt/outcome (game/run game)))))
 
     (it "ends the game if it has a tie"
         (let [board ["X" "O" "X"
@@ -37,4 +33,4 @@
                                          opponent)]
       (should=
         false
-        (check-winner (game/run game))))))
+        (ttt/outcome (game/run game))))))

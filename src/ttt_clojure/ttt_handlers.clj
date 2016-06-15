@@ -19,13 +19,13 @@
 
 (defn- render-game [id game]
   (let [available-moves (board/available-spaces (:board game))
-        winner (ttt/winner (:board game))]
+        outcome (ttt/outcome game)]
     (if (ttt/game-is-over? game)
       (layout/application "Show"
                         (contents/show id
                                        game
                                        available-moves
-                                       winner))
+                                       outcome))
       (layout/application "Show"
                           (contents/show id
                                          game
