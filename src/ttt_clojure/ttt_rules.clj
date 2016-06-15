@@ -40,21 +40,18 @@
   (and (= 2 (count-idxs board potential-seq mark is-occupied?))
        (= 1 (count-idxs board potential-seq mark is-blank?))))
 
-(defn is-tie? [game]
-  (= (count (board/available-spaces (:board game))) 0))
+(defn- is-tie? [board]
+  (= (count (board/available-spaces board)) 0))
 
-(defn advantage-count [board mark]
-  (count (filter true? (map #(check-seq-advantage board % mark) winning-seqs))))
+(defn advantage-count [board player]
+  (count (filter true? (map #(check-seq-advantage board % player) winning-seqs))))
 
-(defn outcome [game]
-  (let [board (:board game)]
+(defn outcome [board]
     (cond
       (check-seqs board x-mark) x-mark
       (check-seqs board o-mark) o-mark
-      (is-tie? game) false)))
+      (is-tie? board) false))
 
-(defn game-is-over? [game]
-  (let [board (:board game)
-        available (board/available-spaces board)]
-    (or (some #(check-seqs board %) player-marks)
-        (is-tie? game))))
+(defn game-is-over? [board]
+  (or (some #(check-seqs board %) player-marks)
+      (is-tie? board)))

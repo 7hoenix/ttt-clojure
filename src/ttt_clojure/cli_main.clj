@@ -10,4 +10,4 @@
     (let [player1 (cli/create-cli "X" "O")
           player2 (ai/create-ai "O" "X")
           game (basic-game/create-new-game player1 player2)]
-    (game/start game)))
+    (game/run game)))

@@ -18,9 +18,10 @@
    :player (get-in request [:params "player"])})
 
 (defn- render-game [id game]
-  (let [available-moves (board/available-spaces (:board game))
-        outcome (ttt/outcome game)]
-    (if (ttt/game-is-over? game)
+  (let [board (:board game)
+        available-moves (board/available-spaces board)
+        outcome (ttt/outcome board)]
+    (if (ttt/game-is-over? board)
       (layout/application "Show"
                         (contents/show id
                                        game
@@ -57,7 +58,7 @@
           game (store/show-game repo id)
           move (get-move request)
           mutated-game (store/make-move repo id move)]
-      (if-not (ttt/game-is-over? mutated-game)
+      (if-not (ttt/game-is-over? (:board mutated-game))
         (let [computer-move (game/get-move mutated-game)
               doubly-mutated-game (store/make-move repo id computer-move)]
           (http/redirect (render-game id doubly-mutated-game) id))

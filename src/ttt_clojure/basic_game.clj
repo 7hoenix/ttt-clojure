@@ -4,10 +4,10 @@
 
 (defn game-over? [game]
   (let [board (:board game)]
-    (ttt/game-is-over? game)))
+    (ttt/game-is-over? board)))
 
-(defn game-has-winner? [game]
-  (not (ttt/is-tie? (board/available-spaces (:board game)))))
+(defn game-has-winner? [board]
+  (not (ttt/outcome board)))
 
 (defn create-new-game ([player1 player2] (create-new-game (board/new-board)
                                                           player1

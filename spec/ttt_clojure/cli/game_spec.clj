@@ -20,7 +20,7 @@
                                          opponent)]
       (should=
         "X"
-        (ttt/outcome (game/run game)))))
+        (ttt/outcome (:board (game/run game))))))
 
     (it "ends the game if it has a tie"
         (let [board ["X" "O" "X"
@@ -33,4 +33,4 @@
                                          opponent)]
       (should=
         false
-        (ttt/outcome (game/run game))))))
+        (ttt/outcome (:board (game/run game)))))))

@@ -5,7 +5,7 @@
 (declare minimax get-best-score)
 
 (defn score-complete-board [board depth player opponent]
-  (condp = (ttt/outcome {:board board})
+  (condp = (ttt/outcome board)
     player (- 10 depth)
     opponent (- depth 10)
     0))
@@ -16,13 +16,13 @@
       (- (* player-adv-count 0.5) (* opponent-adv-count 0.5))))
 
 (defn analyze [board depth player opponent]
-  (if (ttt/game-is-over? {:board board})
+  (if (ttt/game-is-over? board)
     (score-complete-board board depth player opponent)
     (score-incomplete-board board player opponent)))
 
 (defn minimax [board depth player opponent location]
   (let [updated-board (board/make-move board location player)]
-    (if (or (> depth 2) (ttt/game-is-over? {:board updated-board}))
+    (if (or (> depth 2) (ttt/game-is-over? updated-board))
       [(analyze updated-board depth player opponent) location]
       [(* -1 (first (get-best-score updated-board (+ 1 depth) opponent player))) location])))
 
