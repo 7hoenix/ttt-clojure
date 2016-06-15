@@ -4,17 +4,12 @@
             [ttt-clojure.player :as player]
             [ttt-clojure.ttt-rules :as ttt]))
 
-(defn game-over? [game]
-  (let [board (:board game)]
-    (ttt/game-is-over? board
-                       (board/available-spaces board))))
-
 (defn game-has-winner? [game]
   (not (ttt/is-tie? (board/available-spaces (:board game)))))
 
 (defn run ([game] (run game (:player1 game) (:player2 game) println read-line))
   ([game current-player opponent print-func prompt-func]
-   (if (basic-game/game-over? game)
+   (if (ttt/game-is-over? game)
      (or (if (basic-game/game-has-winner? game)
            (player/display current-player (str opponent " wins"))
            (player/display current-player (str "Cats game")))

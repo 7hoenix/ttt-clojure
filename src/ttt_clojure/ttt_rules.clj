@@ -1,4 +1,5 @@
-(ns ttt-clojure.ttt-rules)
+(ns ttt-clojure.ttt-rules
+  (:require [ttt-clojure.board :as board]))
 
 (def x-mark "X")
 (def o-mark "O")
@@ -51,6 +52,8 @@
     (check-seqs board o-mark) o-mark
     :else false))
 
-(defn game-is-over? [board available-spaces]
-  (or (some #(check-seqs board %) player-marks)
-      (is-tie? available-spaces)))
+(defn game-is-over? [game]
+  (let [board (:board game)
+        available (board/available-spaces board)]
+    (or (some #(check-seqs board %) player-marks)
+        (is-tie? available))))

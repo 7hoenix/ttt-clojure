@@ -4,49 +4,44 @@
 
 (describe "ttt rules"
   (it "ends the game if its over"
-      (let [board [" " " " "O"
-                   " " "O" " "
-                   "O" " " " "]
-            available-spaces [0 1 3 5 7 8]]
+      (let [game {:board [" " " " "O"
+                          " " "O" " "
+                          "O" " " " "]}]
         (should=
           true
-          (ttt/game-is-over? board available-spaces))))
+          (ttt/game-is-over? game))))
 
   (it "does not end the game if its not over"
-      (let [board ["X" " " " "
-                   " " "X" " "
-                   " " " " " "]
-            available-spaces [1 2 3 5 6 7 8]]
+      (let [game {:board ["X" " " " "
+                          " " "X" " "
+                          " " " " " "]}]
         (should=
           false
-          (ttt/game-is-over? board available-spaces))))
+          (ttt/game-is-over? game))))
 
   (it "makes sure that the sequence has to be the same symbol"
-      (let [board [" " " " "X"
-                   " " "O" " "
-                   "O" " " " "]
-            available-spaces [0 1 3 5 7 8]]
+      (let [game {:board [" " " " "X"
+                          " " "O" " "
+                          "O" " " " "]}]
         (should=
           false
-          (ttt/game-is-over? board available-spaces))))
+          (ttt/game-is-over? game))))
 
   (it "allows either player to win the game"
-      (let [board ["X" " " " "
-                   " " "X" " "
-                   " " " " "X"]
-            available-spaces [1 2 3 5 6 7]]
+      (let [game {:board ["X" " " " "
+                          " " "X" " "
+                          " " " " "X"]}]
         (should=
           true
-          (ttt/game-is-over? board available-spaces))))
+          (ttt/game-is-over? game))))
 
   (it "handles a cats game"
-      (let [board ["X" "X" "O"
-                   "O" "X" "X"
-                   "O" "O" "X"]
-            available-spaces []]
+      (let [game {:board ["X" "X" "O"
+                          "O" "X" "X"
+                          "O" "O" "X"]}]
         (should=
           true
-          (ttt/game-is-over? board available-spaces))))
+          (ttt/game-is-over? game))))
 
   (it "returns the winner"
     (let [board [" " "O" "X"

@@ -4,7 +4,6 @@
             [ttt-clojure.views.layout :as layout]
             [ttt-clojure.views.contents :as contents]
             [ttt-clojure.web.game :as game]
-            [ttt-clojure.board :as board]
             [ttt-clojure.game-storage :as store]
             [ttt-clojure.board :as board]))
 
@@ -21,7 +20,7 @@
 (defn- render-game [id game]
   (let [available-moves (board/available-spaces (:board game))
         winner (ttt/winner (:board game))]
-    (if (ttt/game-is-over? (:board game) available-moves)
+    (if (ttt/game-is-over? game)
       (layout/application "Show"
                         (contents/show id
                                        game
@@ -58,8 +57,7 @@
           game (store/show-game repo id)
           move (get-move request)
           mutated-game (store/make-move repo id move)]
-      (if-not (ttt/game-is-over? (:board mutated-game)
-                                 (board/available-spaces (:board mutated-game)))
+      (if-not (ttt/game-is-over? mutated-game)
         (let [computer-move (game/get-move mutated-game)
               doubly-mutated-game (store/make-move repo id computer-move)]
           (http/redirect (render-game id doubly-mutated-game) id))

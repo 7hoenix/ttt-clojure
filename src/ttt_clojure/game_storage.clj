@@ -1,6 +1,5 @@
 (ns ttt-clojure.game-storage
   (:require [ttt-clojure.basic-game :as basic-game]
-            [ttt-clojure.board :as board]
             [ttt-clojure.players.ai :as ai]
             [ttt-clojure.players.web :as web]))
 

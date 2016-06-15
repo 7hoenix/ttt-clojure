@@ -4,8 +4,7 @@
 
 (defn game-over? [game]
   (let [board (:board game)]
-    (ttt/game-is-over? board
-                       (board/available-spaces board))))
+    (ttt/game-is-over? game)))
 
 (defn game-has-winner? [game]
   (not (ttt/is-tie? (board/available-spaces (:board game)))))

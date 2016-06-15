@@ -5,7 +5,6 @@
             [ttt-clojure.player :as player]))
 
 (defn get-move [game]
-   (if (ttt/game-is-over? (:board game)
-                          (board/available-spaces (:board game)))
+   (if (ttt/game-is-over? game)
      false
      (player/take-turn (:player2 game) (:board game))))
