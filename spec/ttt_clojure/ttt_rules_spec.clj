@@ -49,4 +49,12 @@
                           "X" "X" "O"]}]
       (should=
         "X"
+        (ttt/outcome game))))
+
+  (it "returns false if the game is tied"
+      (let [game {:board ["X" "O" "X"
+                          "O" "X" "X"
+                          "O" "X" "O"]}]
+      (should=
+        false
         (ttt/outcome game)))))

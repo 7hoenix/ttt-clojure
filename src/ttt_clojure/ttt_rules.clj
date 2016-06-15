@@ -30,9 +30,6 @@
         matches (for [[idx location] indexed :when (some #(= idx %) potential-seq)] idx)]
     (count matches)))
 
-(defn is-tie? [game]
-  (= (count (board/available-spaces (:board game))) 0))
-
 (defn- check-seqs [board mark]
   (some (fn [potential-seq] (check-seq board
                                        potential-seq
@@ -42,6 +39,9 @@
 (defn- check-seq-advantage [board potential-seq mark]
   (and (= 2 (count-idxs board potential-seq mark is-occupied?))
        (= 1 (count-idxs board potential-seq mark is-blank?))))
+
+(defn is-tie? [game]
+  (= (count (board/available-spaces (:board game))) 0))
 
 (defn advantage-count [board mark]
   (count (filter true? (map #(check-seq-advantage board % mark) winning-seqs))))
