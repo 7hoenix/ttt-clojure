@@ -1,4 +1,4 @@
-(ns ttt-clojure.ai
+(ns ttt-clojure.players.ai
   (:require [ttt-clojure.mini-max :as mm]
             [ttt-clojure.player :as player]))
 

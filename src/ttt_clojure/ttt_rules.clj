@@ -1,4 +1,5 @@
-(ns ttt-clojure.ttt-rules)
+(ns ttt-clojure.ttt-rules
+  (:require [ttt-clojure.board :as board]))
 
 (def x-mark "X")
 (def o-mark "O")
@@ -29,9 +30,6 @@
         matches (for [[idx location] indexed :when (some #(= idx %) potential-seq)] idx)]
     (count matches)))
 
-(defn is-tie? [available-spaces]
-  (= (count available-spaces) 0))
-
 (defn- check-seqs [board mark]
   (some (fn [potential-seq] (check-seq board
                                        potential-seq
@@ -42,15 +40,18 @@
   (and (= 2 (count-idxs board potential-seq mark is-occupied?))
        (= 1 (count-idxs board potential-seq mark is-blank?))))
 
-(defn advantage-count [board mark]
-  (count (filter true? (map #(check-seq-advantage board % mark) winning-seqs))))
+(defn- is-tie? [board]
+  (= (count (board/available-spaces board)) 0))
 
-(defn winner [board]
-  (cond
-    (check-seqs board x-mark) x-mark
-    (check-seqs board o-mark) o-mark
-    :else false))
+(defn advantage-count [board player]
+  (count (filter true? (map #(check-seq-advantage board % player) winning-seqs))))
 
-(defn game-is-over? [board available-spaces]
+(defn outcome [board]
+    (cond
+      (check-seqs board x-mark) x-mark
+      (check-seqs board o-mark) o-mark
+      (is-tie? board) false))
+
+(defn game-is-over? [board]
   (or (some #(check-seqs board %) player-marks)
-      (is-tie? available-spaces)))
+      (is-tie? board)))
