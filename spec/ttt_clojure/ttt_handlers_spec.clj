@@ -73,7 +73,7 @@
           404
           (:status (handler request)))))
 
-    (it "rders the appropriate game show page if found"
+    (it "renders the appropriate game show page if found"
       (let [show-game (stub :show-game
                             {:return {:board [" " " " " "]}})
             game-funcs {:show-game show-game}

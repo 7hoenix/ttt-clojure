@@ -1,5 +1,5 @@
 (ns ttt-clojure.game-storage
-  (:require [ttt-clojure.game :as game]
+  (:require [ttt-clojure.basic-game :as basic-game]
             [ttt-clojure.board :as board]
             [ttt-clojure.players.ai :as ai]
             [ttt-clojure.players.web :as web]))
@@ -37,7 +37,7 @@
   (create-game [this]
     (let [players create-players
           id (next-id games)
-          new-game (game/create-new-game (:player1 players)
+          new-game (basic-game/create-new-game (:player1 players)
                                          (:player2 players))
           updated-game (store-game-by-id! games id new-game)]
       {:id id
@@ -48,7 +48,7 @@
 
   (make-move [this id move]
     (let [game (show-game this id)
-          updated-game (game/make-move game move)]
+          updated-game (basic-game/make-move game move)]
       (store-game-by-id! games id updated-game))))
 
 (defn create-atom-game-repo []

@@ -38,12 +38,21 @@
         styled-board (interpose vertical-seperator styled-rows)]
     styled-board))
 
-(defn show [id game available-moves]
-  [:div#game
-   [:h1.game-show (str "Game: " id)]
-   [:p (display-board (:board game))]
-   (form/form-to [:post (str "/games/" id)]
-                 (form/drop-down "location" available-moves)
-                 (form/hidden-field "player" "X")
-                 (form/submit-button {:class "btn btn-primary"}
-                                     "Choose move"))])
+(defn show ([id game available-moves]
+   [:div#game
+    [:h1.game-show (str "Game: " id)]
+    [:p (display-board (:board game))]
+    (form/form-to [:post (str "/games/" id)]
+                  (form/drop-down "location" available-moves)
+                  (form/hidden-field "player" "X")
+                  (form/submit-button {:class "btn btn-primary"}
+                                      "Choose move"))])
+  ([id game _ winner]
+   [:div#game
+    [:h1.game-show (str "Game: " id)]
+    [:p (display-board (:board game))]
+    [:p (str "Game over " winner " wins")]
+    [:h3.header "Would you like to play again?"]
+    (form/form-to [:post "/games"]
+                  (form/submit-button {:class "btn btn-primary"}
+                                      "Play Again"))]))

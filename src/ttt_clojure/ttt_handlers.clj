@@ -1,7 +1,10 @@
 (ns ttt-clojure.ttt-handlers
   (:require [ttt-clojure.util.http :as http]
+            [ttt-clojure.ttt-rules :as ttt]
             [ttt-clojure.views.layout :as layout]
             [ttt-clojure.views.contents :as contents]
+            [ttt-clojure.web.game :as game]
+            [ttt-clojure.board :as board]
             [ttt-clojure.game-storage :as store]
             [ttt-clojure.board :as board]))
 
@@ -16,11 +19,18 @@
    :player (get-in request [:params "player"])})
 
 (defn- render-game [id game]
-  (let [available-moves (board/available-spaces (:board game))]
-    (layout/application "Show"
+  (let [available-moves (board/available-spaces (:board game))
+        winner (ttt/winner (:board game))]
+    (if (ttt/game-is-over? (:board game) available-moves)
+      (layout/application "Show"
                         (contents/show id
                                        game
-                                       available-moves))))
+                                       available-moves
+                                       winner))
+      (layout/application "Show"
+                          (contents/show id
+                                         game
+                                         available-moves)))))
 
 (defn make-new-game [repo]
   (fn [request]
@@ -39,15 +49,21 @@
           available-moves (board/available-spaces (:board game))]
       (if-not (empty? game)
         (http/basic-response (render-game id game))
-        (http/not-found (layout/application "Not Found" (contents/not-found)))))))
+        (http/not-found (layout/application "Not Found"
+                                            (contents/not-found)))))))
 
 (defn make-update-game [repo]
   (fn [request]
     (let [id (get-id request)
           game (store/show-game repo id)
-          move (get-move request)]
-      (store/make-move repo id move)
-      (http/redirect (render-game id game) id))))
+          move (get-move request)
+          mutated-game (store/make-move repo id move)]
+      (if-not (ttt/game-is-over? (:board mutated-game)
+                                 (board/available-spaces (:board mutated-game)))
+        (let [computer-move (game/get-move mutated-game)
+              doubly-mutated-game (store/make-move repo id computer-move)]
+          (http/redirect (render-game id doubly-mutated-game) id))
+        (http/redirect (render-game id mutated-game) id)))))
 
 (def handlers
   (let [game-repo (store/create-atom-game-repo)]
