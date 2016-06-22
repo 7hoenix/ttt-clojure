@@ -5,6 +5,6 @@
   (page/html5 {:ng-app "clojureTTT" :lang "en"}
               [:head
                [:title title]
-               (page/include-css "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+               (page/include-css "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")]
                [:body
-                [:div {:class "container"} content]]]))
+                [:div {:class "container"} content]]))

@@ -3,6 +3,7 @@
             [ttt-clojure.ttt-rules :as ttt]
             [ttt-clojure.views.layout :as layout]
             [ttt-clojure.views.contents :as contents]
+            [ttt-clojure.views.games :as games]
             [ttt-clojure.web.game :as game]
             [ttt-clojure.game-storage :as store]
             [ttt-clojure.board :as board]))
@@ -21,16 +22,18 @@
   (let [board (:board game)
         available-moves (board/available-spaces board)
         outcome (ttt/outcome board)]
-    (if (ttt/game-is-over? board)
-      (layout/application "Show"
-                        (contents/show id
-                                       game
-                                       available-moves
-                                       outcome))
-      (layout/application "Show"
-                          (contents/show id
-                                         game
-                                         available-moves)))))
+    (games/show id game available-moves)))
+
+    ; (if (ttt/game-is-over? board)
+    ;   (layout/application "Show"
+    ;                     (contents/show id
+    ;                                    game
+    ;                                    available-moves
+    ;                                    outcome))
+    ;   (layout/application "Show"
+    ;                       (contents/show id
+    ;                                      game
+    ;                                      available-moves)))))
 
 (defn make-new-game [repo]
   (fn [request]
@@ -52,6 +55,18 @@
         (http/not-found (layout/application "Not Found"
                                             (contents/not-found)))))))
 
+(defn make-get-game [repo]
+  (fn [request]
+    (let [id (get-id request)
+          game (store/show-game repo id)
+          available-moves (board/available-spaces (:board game))]
+      (http/basic-response (:board game)))))
+
+      ; (if-not (empty? game)
+      ;   (http/basic-response (render-game id game))
+      ;   (http/not-found (layout/application "Not Found"
+      ;                                       (contents/not-found)))))))
+
 (defn make-update-game [repo]
   (fn [request]
     (let [id (get-id request)
@@ -64,12 +79,29 @@
           (http/redirect (render-game id doubly-mutated-game) id))
         (http/redirect (render-game id mutated-game) id)))))
 
+(defn make-make-move [repo]
+  (fn [request]
+    (let [id (get-id request)
+          game (store/show-game repo id)
+          move (get-move request)
+          mutated-game (store/make-move repo id move)]
+      (http/basic-response (:board mutated-game)))))
+
+      ; (if-not (ttt/game-is-over? (:board mutated-game))
+      ;   (let [computer-move (game/get-move mutated-game)
+      ;         doubly-mutated-game (store/make-move repo id computer-move)]
+      ;     (http/redirect (render-game id doubly-mutated-game) id))
+      ;   (http/redirect (render-game id mutated-game) id)))))
+
 (def handlers
   (let [game-repo (store/create-atom-game-repo)]
     {:get
      {"/" (make-new-game game-repo)
       "/games/" (make-show-game game-repo)
+      "/game-board/" (make-get-game game-repo)
       "/favicon.ico" (fn [request] (println "cake"))}
      :post
      {"/games" (make-create-game game-repo)
-      "/games/" (make-update-game game-repo)}}))
+      "/games/" (make-update-game game-repo)}
+     :put
+     {"/games/" (make-make-move game-repo)}}))
