@@ -1,5 +1,5 @@
-function updateBoard(location, player) {
-	fetch('/games/' + getId(), {
+function updateGame(id, location, player) {
+	return fetch('/games/' + id, {
 		method: 'PUT',
 		headers:  {
 			"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
@@ -14,7 +14,7 @@ function getId() {
 };
 
 function createGame() {
-	fetch('/games', {
+	return fetch('/games', {
 		method: 'POST'
 	}).then(function(response) { return response.json();
 	}).then(displayGame);
@@ -27,7 +27,7 @@ function displayBoard(board) {
 
 		if (board[index] === " ") {
 			location.addEventListener("click", function() {
-				updateBoard(location.attributes.getNamedItem('data-board-idx').value, "X");
+				updateBoard(getId(), location.attributes.getNamedItem('data-board-idx').value, "X");
 			});
 		}
 
