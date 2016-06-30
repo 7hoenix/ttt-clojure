@@ -5,7 +5,7 @@
 #board {
 	width: 900px;
 	height: 900px;
-	background: purple;
+	background: #FFD775;
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -21,13 +21,16 @@
 
 .location {
 	float: left;
-	background: blue;
-	width: 300px;
-	height: 300px;
+	background: #2F54B2;
+	width: 305px;
+	height: 305px;
 	border: 5px ;
 	margin: 1px;
 
 	color: white;
 	font-weight: bold;
-	font-size: 2em;
+	font-size: 10em;
+	text-align: center;
+	padding-bottom: 50px;
+	padding-top: 50px;
 }

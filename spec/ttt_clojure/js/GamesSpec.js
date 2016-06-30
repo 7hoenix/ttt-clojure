@@ -1,35 +1,66 @@
-describe("isValidMove", function() {
-	it("returns true if the spot is not occupied.", function() {
-		let board = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
-		let move = 0;
+describe("createGame", function() {
+ 	it("posts the game creation request to the server", function() {
+    let body = JSON.stringify({ id: "1" , game: { board: [" ", " ", " "]}})
+    let res = new window.Response(body, {
+      status: 200,
+      headers: {
+        'Content-type': 'application/json'
+      }
+    });
 
-		expect(isValidMove(board, move)).toEqual(true);
-	});
+    spyOn(window, "fetch").and.returnValue(Promise.resolve(res));
 
-	it("returns false if the spot is occupied", function() {
-		let board = ["X", " ", " ", " ", " ", " ", " ", " ", " "];
-		let move = 0;
-
-		expect(isValidMove(board, move)).toEqual(false);
-	});
-
-	it("returns false if move is not on board", function() {
-		let board = ["X", " ", " ", " ", " ", " ", " ", " ", " "];
-		let move = 11;
-
-		expect(isValidMove(board, move)).toEqual(false);
+    createGame();
+    expect(window.fetch).toHaveBeenCalledWith('/games', { method: 'POST'});
 	});
 });
 
-describe("makeMove", function() {
-	it("makes the move on the board", function() {
-		let game = new Game(1);
-		spyOn(game, "updateBoard");
-		let player = "X";
-		let move = 0;
-		let board = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
-		game.makeMove(board, move, player);
+describe("displayGame", function() {
+  it("sets the game id on the #game-id div", function() {
+    let response = {id: 1, game: {board: [" ", " "]}};
 
-		expect(game.updateBoard).toHaveBeenCalledWith(board, move, player);
-	});
+    withFixture(function() {
+      var el = addFixture('div', function(el) {
+        el.id = 'game-id';
+      });
+
+      displayGame(response);
+      expect(document.querySelector( "#game-id").innerText).toEqual('1');
+    });
+  });
 });
+
+function withFixture(fn) {
+  let sandboxDiv = document.createElement('div');
+  sandboxDiv.id = 'sandbox';
+  document.body.appendChild(sandboxDiv);
+
+  fn();
+
+  // remove sandbox div
+}
+
+function addFixture(elementType, builder) {
+  var el = document.createElement(elementType);
+  builder(el);
+
+  document.querySelector('#sandbox').appendChild(el)
+  return el;
+}
+
+/*
+Setup HTML docuemnt fixture.
+
+JSdom.
+
+document with body
+
+mock out fetch.
+
+Create body/elements that game expects.
+
+let result = new Promise
+
+jasmine-jquery => set fixtures
+
+*/

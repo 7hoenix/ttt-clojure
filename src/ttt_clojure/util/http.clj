@@ -9,19 +9,17 @@
       (assoc resp :headers updated-headers))
     (assoc resp :headers headers)))
 
-(defn- build-response [body status]
+(defn- build-response [body status content-type]
   (-> {}
       (assign-status status)
-      (assign-headers {"Content-Type" "text/html"})
+      (assign-headers {"Content-Type" content-type})
       (assoc :body body)))
 
 (defn basic-response [body]
-  (build-response body 200))
+  (build-response body 200 "text/html"))
+
+(defn json-response [body]
+  (build-response body 200 "application/json"))
 
 (defn not-found [body]
-  (build-response body 404))
-
-(defn redirect [body id]
-  (assign-headers
-    (build-response body 302)
-    {"Location" (str "/games/" id)}))
+  (build-response body 404 "text/html"))

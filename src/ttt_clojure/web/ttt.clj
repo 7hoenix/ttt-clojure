@@ -28,11 +28,11 @@
     (let [id (get-id request)
           game (lookup-game repo id)
           move (get-move request)]
-      (game/make-move game move))))
+      (http/json-response (store/make-move repo id move)))))
 
 (defn create-game [repo]
   (fn [request]
-    (store/create-game repo)))
+    (http/json-response (store/create-game repo))))
 
 (defn home [repo]
   (fn [request]

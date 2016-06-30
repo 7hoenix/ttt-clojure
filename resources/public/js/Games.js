@@ -1,28 +1,42 @@
-function Game (id) {
-	this.updateBoard = function (board, move, player) {
-		let payload = {
-			board: board,
-			move: move,
-			player: player
-		};
-		var data = new FormData();
-		data.append( "json", JSON.stringify( payload ) );
-
-		fetch('/games/' + id, {
-			method: 'put',
-			body: data
-		}).then(function(response) { return response.json();
-		}).then(function(data) { alert( JSON.stringify( data ) ) });
-
-	}
+function updateBoard(location, player) {
+	fetch('/games/' + getId(), {
+		method: 'PUT',
+		headers:  {
+			"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+		},
+		body: 'location=' + location + '&player=' + player
+	}).then(function(response) { return response.json();
+	}).then(displayGame);
 }
 
-Game.prototype.makeMove = function (board, move, player) {
-	if (isValidMove(board, move)) {
-		this.updateBoard(board, move, player);
+function getId() {
+	return parseInt(document.querySelector( "#game-id" ).innerText);
+};
+
+function createGame() {
+	fetch('/games', {
+		method: 'POST'
+	}).then(function(response) { return response.json();
+	}).then(displayGame);
+};
+
+function displayBoard(board) {
+	for (index in board) {
+		let location = document.querySelector( `.location[data-board-idx="${index}"]`);
+		if (!location) { continue; }
+
+		if (board[index] === " ") {
+			location.addEventListener("click", function() {
+				updateBoard(location.attributes.getNamedItem('data-board-idx').value, "X");
+			});
+		}
+
+		location.innerText = board[index]
 	}
 };
 
-function isValidMove(board, move) {
-	return (board[move] === " " && move < board.length) ? true : false;
+function displayGame(response) {
+	let idDiv = document.querySelector( "#game-id" )
+	idDiv.innerText = response.id;
+	displayBoard(response.game.board);
 };

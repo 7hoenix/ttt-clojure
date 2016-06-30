@@ -3,7 +3,8 @@
             [ring.middleware.params :as params]
             [ring.middleware.resource :as resource]
             [ring.middleware.content-type :as content]
-            [ring.middleware.not-modified :as not-modified]))
+            [ring.middleware.not-modified :as not-modified]
+            [ring.middleware.json :as json]))
 
 (defn identify-route [uri]
   (re-find #"\D+" uri))
@@ -22,4 +23,5 @@
       (resource/wrap-resource "public")
       (content/wrap-content-type)
       (not-modified/wrap-not-modified)
+      (json/wrap-json-response)
       (reload/wrap-reload)))

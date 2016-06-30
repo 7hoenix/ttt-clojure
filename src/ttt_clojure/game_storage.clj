@@ -48,7 +48,8 @@
   (make-move [this id move]
     (let [game (show-game this id)
           updated-game (basic-game/make-move game move)]
-      (store-game-by-id! games id updated-game))))
+      {:id id
+       :game (store-game-by-id! games id updated-game)})))
 
 (defn create-atom-game-repo []
   (map->AtomGameRepository {:games (atom {})}))
