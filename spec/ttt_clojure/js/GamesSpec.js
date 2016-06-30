@@ -52,14 +52,6 @@ describe("Game", function() {
     });
   });
 
-  describe("getId", function() {
-    it("gets the game id from the #game-id div", function() {
-      let id = getId();
-
-      expect(id).toEqual(9);
-    });
-  });
-
   describe("updateGame", function() {
     it("hands a put request to update the game board to the server", function(done) {
       let body = JSON.stringify({ id: "3" , game: { board: [" ", " ", "X"]}})
@@ -90,7 +82,7 @@ describe("Game", function() {
 
       let updater = jasmine.createSpy('updateGame')
 
-      displayBoard(board, updater);
+      displayBoard(3, board, updater);
 
       for (idx in board) {
     		let el = document.querySelector( `.location[data-board-idx="${idx}"]`);
@@ -100,4 +92,22 @@ describe("Game", function() {
       expect(updater.calls.count()).toEqual(6);
     });
   });
+
+  describe("getComputerMove", function() {
+    it("sends a get request to the ai move route", function(done) {
+      let body = JSON.stringify({ id: "3", location: "2", player: "O"})
+      let res = new window.Response(body, {
+        status: 200,
+        headers: {
+          'Content-type': 'application/json'
+        }
+      });
+
+      spyOn(window, "fetch").and.returnValue(Promise.resolve(res));
+
+      getComputerMove(3).then(function() {
+        expect(window.fetch).toHaveBeenCalledWith('/ai-move/3', { method: 'GET', });
+      }).then(done);
+    })
+  })
 });

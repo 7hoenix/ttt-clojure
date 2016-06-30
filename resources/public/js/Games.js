@@ -9,10 +9,6 @@ function updateGame(id, location, player) {
 	}).then(displayGame);
 }
 
-function getId() {
-	return parseInt(document.querySelector( "#game-id" ).innerText);
-};
-
 function createGame() {
 	return fetch('/games', {
 		method: 'POST'
@@ -20,14 +16,14 @@ function createGame() {
 	}).then(displayGame);
 };
 
-function displayBoard(board, updateFunc) {
+function displayBoard(id, board, updateFunc) {
 	for (index in board) {
 		let location = document.querySelector( `.location[data-board-idx="${index}"]`);
 		if (!location) { continue; }
 
 		if (board[index] === " ") {
 			location.addEventListener("click", function() {
-				updateFunc(getId(), location.attributes.getNamedItem('data-board-idx').value, "X");
+				updateFunc(id, location.attributes.getNamedItem('data-board-idx').value, "X");
 			});
 		}
 
@@ -38,5 +34,5 @@ function displayBoard(board, updateFunc) {
 function displayGame(response) {
 	let idDiv = document.querySelector( "#game-id" )
 	idDiv.innerText = response.id;
-	displayBoard(response.game.board, updateGame);
+	displayBoard(response.id, response.game.board, updateGame);
 };
