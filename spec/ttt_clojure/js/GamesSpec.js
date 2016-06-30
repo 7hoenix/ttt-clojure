@@ -10,6 +10,7 @@ describe("Game", function() {
 
       for (index in [0, 1, 2, 3, 4, 5, 6, 7, 8]) {
         addFixture('div', function(el) {
+          el.className = 'location';
           addAttribute('data-board-idx', index, function(attr) {
             el.attributes.setNamedItem(attr);
           });
@@ -80,6 +81,23 @@ describe("Game", function() {
           body: "location=2&player=X"
         });
       }).then(done);
+    });
+  });
+
+  describe("displayBoard", function() {
+    it("attaches click event listeners to each of the open locations on the board", function() {
+      let board = [" ", "X", " ", " ", "O", " ", " ", "X", " "];
+
+      let updater = jasmine.createSpy('updateGame')
+
+      displayBoard(board, updater);
+
+      for (idx in board) {
+    		let el = document.querySelector( `.location[data-board-idx="${idx}"]`);
+        el.click();
+      }
+
+      expect(updater.calls.count()).toEqual(6);
     });
   });
 });

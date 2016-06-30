@@ -20,14 +20,14 @@ function createGame() {
 	}).then(displayGame);
 };
 
-function displayBoard(board) {
+function displayBoard(board, updateFunc) {
 	for (index in board) {
 		let location = document.querySelector( `.location[data-board-idx="${index}"]`);
 		if (!location) { continue; }
 
 		if (board[index] === " ") {
 			location.addEventListener("click", function() {
-				updateBoard(getId(), location.attributes.getNamedItem('data-board-idx').value, "X");
+				updateFunc(getId(), location.attributes.getNamedItem('data-board-idx').value, "X");
 			});
 		}
 
@@ -38,5 +38,5 @@ function displayBoard(board) {
 function displayGame(response) {
 	let idDiv = document.querySelector( "#game-id" )
 	idDiv.innerText = response.id;
-	displayBoard(response.game.board);
+	displayBoard(response.game.board, updateGame);
 };
