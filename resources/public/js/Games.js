@@ -7,7 +7,7 @@ function updateGame(id, location, player) {
 		body: 'location=' + location + '&player=' + player
 	}).then(function(response) { return response.json();
 	}).then(displayGame);
-}
+};
 
 function createGame() {
 	return fetch('/games', {
@@ -35,4 +35,30 @@ function displayGame(response) {
 	let idDiv = document.querySelector( "#game-id" )
 	idDiv.innerText = response.id;
 	displayBoard(response.id, response.game.board, updateGame);
+};
+
+function getComputerMove(id, updateFunc) {
+	return fetch('/ai-move/' + id, {
+		method: 'GET'
+	}).then(function(response) { return response.json();
+	}).then(function(resp) { updateFunc(resp.id, resp.location, resp.player) });
+};
+
+function getCurrentPlayersTurn(board, player1, player2) {
+	let p1Count = 0
+	let p2Count = 0;
+	for (index in board) {
+		if (board[index] === player1.symbol) {
+			p1Count += 1;
+		} else if (board[index] === player2.symbol) {
+			p2Count += 1;
+		} else {
+			continue;
+		}
+	}
+	if (p2Count >= p1Count) {
+		return player1;
+	} else if (p1Count > p2Count) {
+		return player2;
+	}
 };

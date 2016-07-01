@@ -7,41 +7,58 @@
 
 (describe "lookup-game"
   (it "returns game info for a game"
-    (let [game {:board ["X"]}
-          game-repo {1 game}]
+    (let [repo (store/create-atom-game-repo)
+          game-info (store/create-game repo)]
       (should=
-        ["X"]
-        (:board (ttt/lookup-game game-repo 1)))))
+        [" " " " " " " " " " " " " " " " " "]
+        (:board (ttt/lookup-game repo (:id game-info))))))
 
   (it "returns a string of not found if not found"
-    (let [game-repo {}]
+    (let [repo (store/create-atom-game-repo)]
       (should=
         "Not found"
-        (ttt/lookup-game game-repo 1)))))
+        (ttt/lookup-game repo 1000)))))
 
 (describe "Show game"
-  (it "renders the proper game page"
-    (let [game {:board ["X" " "]}
-          game-repo {1 game}
+  (it "returns the proper game as json based on a get request"
+    (let [repo (store/create-atom-game-repo)
+          game-info (store/create-game repo)
           request (mock/request :get "/games/1")]
       (should=
-        ["X" " "]
-        (:board ((ttt/show-game game-repo) request))))))
+        (:game game-info)
+        (:body ((ttt/show-game repo) request))))))
 
 (describe "Update game"
   (it "returns the game with an updated board"
-    (let [game {:board ["X" " "]}
-          game-repo {1 game}
+    (let [repo (store/create-atom-game-repo)
+          game-info (store/create-game repo)
           request (mock/request :put "/games/1" {:location "1"
                                                  :player "O"})]
       (should=
-        ["X" "O"]
-        (:board ((params/wrap-params (ttt/update-game game-repo)) request))))))
+        [" " "O" " " " " " " " " " " " " " "]
+        (:board
+          (:game
+            (:body
+              ((params/wrap-params (ttt/update-game repo)) request))))))))
 
 (describe "Create game"
   (it "returns the newly created game"
-    (let [game-repo (store/create-atom-game-repo)
+    (let [repo (store/create-atom-game-repo)
           request (mock/request :post "/games")]
       (should=
         1
-        (:id ((ttt/create-game game-repo) request))))))
+        (:id
+          (:body ((ttt/create-game repo) request)))))))
+
+(describe "ai-move"
+  (it "sends a request to minimax and returns the move"
+    (let [repo (store/create-atom-game-repo)
+          game-info (store/create-game repo)
+          request (mock/request :get "/ai-move/1")]
+      (store/make-move repo 1 {:location 0
+                               :player "X"})
+        (should=
+          {:location 4
+           :player "O"
+           :id 1}
+          (:body ((ttt/ai-move repo) request))))))

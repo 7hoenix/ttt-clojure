@@ -17,7 +17,8 @@
         (should=
           ["X" " " " " " " " " " " " " " " " "]
           (:board
-              (store/make-move @test-repo 1 move)))))
+            (:game
+              (store/make-move @test-repo 1 move))))))
 
   (it "can return the requested game"
       (store/create-game @test-repo)

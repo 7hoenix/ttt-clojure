@@ -37,7 +37,7 @@
     (let [players create-players
           id (next-id games)
           new-game (basic-game/create-new-game (:player1 players)
-                                         (:player2 players))
+                                               (:player2 players))
           updated-game (store-game-by-id! games id new-game)]
       {:id id
        :game updated-game}))

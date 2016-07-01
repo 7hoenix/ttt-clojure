@@ -104,10 +104,30 @@ describe("Game", function() {
       });
 
       spyOn(window, "fetch").and.returnValue(Promise.resolve(res));
+      let updater = jasmine.createSpy('updateGame')
 
-      getComputerMove(3).then(function() {
+      getComputerMove(3, updater).then(function() {
         expect(window.fetch).toHaveBeenCalledWith('/ai-move/3', { method: 'GET', });
+        expect(updater).toHaveBeenCalledWith("3", "2", "O")
       }).then(done);
+    });
+  });
+
+  describe("getCurrentPlayersTurn", function() {
+    it("dynamically calculates the next players turn based on the board", function() {
+      let board = [" ", "X", " ", " ", "O", " ", " ", "X", " "];
+      let player1 = {symbol: "X"}
+      let player2 = {symbol: "O"}
+
+      expect(getCurrentPlayersTurn(board, player1, player2)).toEqual(player2);
     })
-  })
+
+    it("Defaults to player1", function() {
+      let board = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+      let player1 = {symbol: "X"}
+      let player2 = {symbol: "O"}
+
+      expect(getCurrentPlayersTurn(board, player1, player2)).toEqual(player1);
+    });
+  });
 });
