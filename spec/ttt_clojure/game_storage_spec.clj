@@ -17,11 +17,24 @@
         (should=
           ["X" " " " " " " " " " " " " " " " "]
           (:board
-              (store/make-move @test-repo 1 move)))))
+            (:game
+                (store/make-move @test-repo 1 move))))))
 
   (it "can return the requested game"
       (store/create-game @test-repo)
       (should=
         [" " " " " " " " " " " " " " " " " "]
         (:board
+          (:game
             (store/show-game @test-repo 1)))))
+
+  (it "can return the updated game"
+      (store/create-game @test-repo)
+      (let [game-info (store/show-game @test-repo 1)
+            updated-board ["X" "X" "O" "O" " " " " " " " " " "]
+            updated-game (assoc-in game-info [:game :board] updated-board)]
+      (should=
+        ["X" "X" "O" "O" " " " " " " " " " "]
+        (:board
+          (:game
+            (store/update-game @test-repo 1 updated-game)))))))

@@ -13,8 +13,8 @@
                                                           player1
                                                           player2))
   ([board player1 player2] {:board board
-                            :player1 player1
-                            :player2 player2}))
+                            :current-player player1
+                            :other-player player2}))
 
 (defn make-move [game move]
   (let [new-board (board/make-move (:board game)
