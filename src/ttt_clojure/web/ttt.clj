@@ -43,7 +43,8 @@
   (fn [request]
     (let [id (get-id request)
           game (store/show-game repo id)
-          move (player/take-turn (:player2 game) (:board game))]
+          move (player/take-turn (get-in game [:game :player2])
+                                 (get-in game [:game :board]))]
     (http/json-response (merge move {:id id})))))
 
 (defn home [repo]

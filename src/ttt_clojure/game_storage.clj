@@ -27,6 +27,7 @@
   (games [this])
   (create-game [this])
   (show-game [this id])
+  (update-game [this id game])
   (make-move [this id move]))
 
 (defrecord AtomGameRepository [games]
@@ -45,6 +46,10 @@
   (show-game [this id]
     {:id id
      :game (get (deref games) id)})
+
+  (update-game [this id game-info]
+    {:id id
+     :game (store-game-by-id! games id (:game game-info))})
 
   (make-move [this id move]
     (let [game (get (deref games) id)

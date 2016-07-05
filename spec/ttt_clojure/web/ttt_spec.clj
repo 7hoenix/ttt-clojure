@@ -37,16 +37,16 @@
         (:id
           (:body ((ttt/create-game repo) request)))))))
 
-; (describe "ai-move"
-;   (it "sends a request to minimax and returns the move"
-;     (let [repo (store/create-atom-game-repo)
-;           board [" " "O" " " " " " " " " " " " "  " "]
-;           request (mock/request :get "/ai-move/1")]
-;       (swap! (store/games repo assoc 1 {:board }))
-;       (store/make-move repo 1 {:location 0
-;                                :player "X"})
-;         (should=
-;           {:location 4
-;            :player "O"
-;            :id 1}
-;           (:body ((ttt/ai-move repo) request))))))
+(describe "ai-move"
+  (it "sends a request to minimax and returns the move"
+    (let [repo (store/create-atom-game-repo)
+          game-info (store/create-game repo)
+          board ["X" "O" "X" "O" "O" "X" "O" "X"  " "]
+          updated-game (assoc-in game-info [:game :board] board)
+          request (mock/request :get "/ai-move/1")]
+      (store/update-game repo 1 updated-game)
+      (should=
+        {:location 8
+         :player "O"
+         :id 1}
+        (:body ((ttt/ai-move repo) request))))))
