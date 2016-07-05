@@ -42,9 +42,13 @@
     (let [repo (store/create-atom-game-repo)
           game-info (store/create-game repo)
           board ["X" "O" "X" "O" "O" "X" "O" "X"  " "]
+          current-player (get-in game-info [:game :current-player])
+          other-player (get-in game-info [:game :other-player])
           updated-game (assoc-in game-info [:game :board] board)
+          updated-game-c (assoc-in updated-game [:game :current-player] other-player)
+          updated-game-o (assoc-in updated-game-c [:game :other-player] current-player)
           request (mock/request :get "/ai-move/1")]
-      (store/update-game repo 1 updated-game)
+      (store/update-game repo 1 updated-game-o)
       (should=
         {:location 8
          :player "O"

@@ -4,7 +4,7 @@
             [ttt-clojure.player :as player]
             [ttt-clojure.ttt-rules :as ttt]))
 
-(defn run ([game] (run game (:player1 game) (:player2 game)))
+(defn run ([game] (run game (:current-player game) (:other-player game)))
   ([game current-player opponent]
    (if (ttt/game-is-over? (:board game))
      (or (if (ttt/outcome (:board game))

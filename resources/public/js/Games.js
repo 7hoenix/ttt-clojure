@@ -40,48 +40,28 @@ function getHumanMove(id, board, updateFunc) {
 	}
 };
 
-function displayGame(response) {
-	let idDiv = document.querySelector( "#game-id" )
-	idDiv.innerText = response.id;
-	displayBoard(response.id, response.game.board);
-};
-
 function getComputerMove(id, board, updateFunc) {
 	return fetch('/ai-move/' + id, {
 		method: 'GET'
 	}).then(function(response) { return response.json();
 	}).then(function(resp) { updateFunc(resp.id, resp.location, resp.player) });
 };
-//
-// function getCurrentPlayersTurn(board, player1, player2) {
-// 	let p1Count = 0
-// 	let p2Count = 0;
-// 	for (index in board) {
-// 		if (board[index] === player1.symbol) {
-// 			p1Count += 1;
-// 		} else if (board[index] === player2.symbol) {
-// 			p2Count += 1;
-// 		} else {
-// 			continue;
-// 		}
-// 	}
-// 	if (p2Count >= p1Count) {
-// 		return player1;
-// 	} else if (p1Count > p2Count) {
-// 		return player2;
-// 	}
-// };
 
-function gameTick(id, board, currentPlayer, opponent, updater, moveGetters) {
-	return fetch('/game-over/' + id, {
-		method: 'GET'
-	}).then(function(response) { return response.json();
-	}).then(function(resp) {
-		if (resp.gameOver === true) {
-			displayBoard(id, board);
-			break;
-		} else {
-			moveGetters[currentPlayer.type](id, board, updater);
-		}
-	});
+function last3Characters(str) {
+	return str.substr(str.length - 3)
+}
+
+function displayGame(response) {
+	let idDiv = document.querySelector( "#game-id" )
+	idDiv.innerText = response.id;
+	displayBoard(response.id, response.game.board);
+	let playerType = last3Characters(response.game["type-of-player"]);
+
+	if (response.game["game-over"] === true) {
+		alert(response.game["outcome"]);
+	} else if (playerType === "Web") {
+		getHumanMove(response.id, response.game["board"], updateGame)
+	} else if (playerType === ".AI") {
+		getComputerMove(response.id, response.game["board"], updateGame)
+	}
 };

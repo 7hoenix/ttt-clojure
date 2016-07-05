@@ -1,5 +1,6 @@
 (ns ttt-clojure.web.ttt
   (:require [ttt-clojure.basic-game :as game]
+            [ttt-clojure.ttt-rules :as ttt]
             [ttt-clojure.views.games  :as games]
             [ttt-clojure.util.http :as http]
             [ttt-clojure.player :as player]
@@ -15,35 +16,51 @@
   {:location (str->int (get-in request [:params "location"]))
    :player (get-in request [:params "player"])})
 
-(defn- attach-analysis [game-info]
-  (let [game-over (game/game-over? (:game game-info))]
-    (if-let [outcome game-over]
-      (merge game-info {:game-over game-over
-                        :outcome outcome})
-      game-info)))
+(defn- get-type [player]
+  (if (= (type player) 'ttt-clojure.players.web.Web)
+    :web
+    :ai))
+
+(defn- include-game-over [info]
+  (assoc-in info [:game :game-over] (game/game-over? (:game info))))
+
+(defn- include-outcome [info]
+  (let [game-over (game/game-over? (:game info))]
+    (if game-over
+      (assoc-in info [:game :outcome] (ttt/outcome (get-in info [:game :board])))
+      info)))
+
+(defn- include-current-player-type [info]
+  (let [current-player (get-in info [:game :current-player])]
+    (assoc-in info [:game :type-of-player] (str (type current-player)))))
+
+(defn- attach-game-info [game-info]
+  (-> (include-game-over game-info)
+      (include-outcome)
+      (include-current-player-type)))
 
 (defn show-game [repo]
   (fn [request]
     (let [id (get-id request)
           game (store/show-game repo id)]
-      (http/json-response (attach-analysis game)))))
+      (http/json-response (attach-game-info game)))))
 
 (defn update-game [repo]
   (fn [request]
     (let [id (get-id request)
           move (get-move request)
           mutated-game (store/make-move repo id move)]
-      (http/json-response (attach-analysis mutated-game)))))
+      (http/json-response (attach-game-info mutated-game)))))
 
 (defn create-game [repo]
   (fn [request]
-    (http/json-response (attach-analysis (store/create-game repo)))))
+    (http/json-response (attach-game-info (store/create-game repo)))))
 
 (defn ai-move [repo]
   (fn [request]
     (let [id (get-id request)
           game (store/show-game repo id)
-          move (player/take-turn (get-in game [:game :player2])
+          move (player/take-turn (get-in game [:game :current-player])
                                  (get-in game [:game :board]))]
     (http/json-response (merge move {:id id})))))
 
