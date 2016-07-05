@@ -16,7 +16,18 @@ function createGame() {
 	}).then(displayGame);
 };
 
-function displayBoard(id, board, updateFunc) {
+function displayBoard(id, board) {
+	for (index in board) {
+		let location = document.querySelector( `.location[data-board-idx="${index}"]`);
+		if (!location) { continue; }
+		let locationClone = location.cloneNode(true);
+		location.parentNode.replaceChild(locationClone, location)
+
+		locationClone.innerText = board[index]
+	}
+};
+
+function getHumanMove(id, board, updateFunc) {
 	for (index in board) {
 		let location = document.querySelector( `.location[data-board-idx="${index}"]`);
 		if (!location) { continue; }
@@ -26,39 +37,51 @@ function displayBoard(id, board, updateFunc) {
 				updateFunc(id, location.attributes.getNamedItem('data-board-idx').value, "X");
 			});
 		}
-
-		location.innerText = board[index]
 	}
 };
 
 function displayGame(response) {
 	let idDiv = document.querySelector( "#game-id" )
 	idDiv.innerText = response.id;
-	displayBoard(response.id, response.game.board, updateGame);
+	displayBoard(response.id, response.game.board);
 };
 
-function getComputerMove(id, updateFunc) {
+function getComputerMove(id, board, updateFunc) {
 	return fetch('/ai-move/' + id, {
 		method: 'GET'
 	}).then(function(response) { return response.json();
 	}).then(function(resp) { updateFunc(resp.id, resp.location, resp.player) });
 };
+//
+// function getCurrentPlayersTurn(board, player1, player2) {
+// 	let p1Count = 0
+// 	let p2Count = 0;
+// 	for (index in board) {
+// 		if (board[index] === player1.symbol) {
+// 			p1Count += 1;
+// 		} else if (board[index] === player2.symbol) {
+// 			p2Count += 1;
+// 		} else {
+// 			continue;
+// 		}
+// 	}
+// 	if (p2Count >= p1Count) {
+// 		return player1;
+// 	} else if (p1Count > p2Count) {
+// 		return player2;
+// 	}
+// };
 
-function getCurrentPlayersTurn(board, player1, player2) {
-	let p1Count = 0
-	let p2Count = 0;
-	for (index in board) {
-		if (board[index] === player1.symbol) {
-			p1Count += 1;
-		} else if (board[index] === player2.symbol) {
-			p2Count += 1;
+function gameTick(id, board, currentPlayer, opponent, updater, moveGetters) {
+	return fetch('/game-over/' + id, {
+		method: 'GET'
+	}).then(function(response) { return response.json();
+	}).then(function(resp) {
+		if (resp.gameOver === true) {
+			displayBoard(id, board);
+			break;
 		} else {
-			continue;
+			moveGetters[currentPlayer.type](id, board, updater);
 		}
-	}
-	if (p2Count >= p1Count) {
-		return player1;
-	} else if (p1Count > p2Count) {
-		return player2;
-	}
+	});
 };

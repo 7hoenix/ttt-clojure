@@ -15,25 +15,29 @@
   {:location (str->int (get-in request [:params "location"]))
    :player (get-in request [:params "player"])})
 
-(defn lookup-game [repo id]
-  (get (store/games repo) id "Not found"))
+(defn- attach-analysis [game-info]
+  (let [game-over (game/game-over? (:game game-info))]
+    (if-let [outcome game-over]
+      (merge game-info {:game-over game-over
+                        :outcome outcome})
+      game-info)))
 
 (defn show-game [repo]
   (fn [request]
     (let [id (get-id request)
-          game (lookup-game repo id)]
-      (http/json-response game))))
+          game (store/show-game repo id)]
+      (http/json-response (attach-analysis game)))))
 
 (defn update-game [repo]
   (fn [request]
     (let [id (get-id request)
-          game (lookup-game repo id)
-          move (get-move request)]
-      (http/json-response (store/make-move repo id move)))))
+          move (get-move request)
+          mutated-game (store/make-move repo id move)]
+      (http/json-response (attach-analysis mutated-game)))))
 
 (defn create-game [repo]
   (fn [request]
-    (http/json-response (store/create-game repo))))
+    (http/json-response (attach-analysis (store/create-game repo)))))
 
 (defn ai-move [repo]
   (fn [request]

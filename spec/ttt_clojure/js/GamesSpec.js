@@ -77,13 +77,22 @@ describe("Game", function() {
   });
 
   describe("displayBoard", function() {
-    it("attaches click event listeners to each of the open locations on the board", function() {
+    it("Creates new nodes and changes the text to the board", function() {
       let board = [" ", "X", " ", " ", "O", " ", " ", "X", " "];
 
+      displayBoard(3, board);
+
+    	let el = document.querySelector( `.location[data-board-idx="7"]`);
+      expect(el.innerText).toEqual("X");
+    });
+  });
+
+  describe("getHumanMove", function() {
+    it("attaches click event listeners to each of the open locations on the board", function() {
+      let board = [" ", "X", " ", " ", "O", " ", " ", "X", " "];
       let updater = jasmine.createSpy('updateGame')
 
-      displayBoard(3, board, updater);
-
+      getHumanMove(3, board, updater);
       for (idx in board) {
     		let el = document.querySelector( `.location[data-board-idx="${idx}"]`);
         el.click();
@@ -106,28 +115,64 @@ describe("Game", function() {
       spyOn(window, "fetch").and.returnValue(Promise.resolve(res));
       let updater = jasmine.createSpy('updateGame')
 
-      getComputerMove(3, updater).then(function() {
-        expect(window.fetch).toHaveBeenCalledWith('/ai-move/3', { method: 'GET', });
+      getComputerMove(3, [], updater).then(function() {
+        expect(window.fetch).toHaveBeenCalledWith('/ai-move/3', { method: 'GET' });
         expect(updater).toHaveBeenCalledWith("3", "2", "O")
       }).then(done);
     });
   });
+  //
+  // describe("getCurrentPlayersTurn", function() {
+  //   it("dynamically calculates the next players turn based on the board", function() {
+  //     let board = [" ", "X", " ", " ", "O", " ", " ", "X", " "];
+  //     let player1 = {symbol: "X"}
+  //     let player2 = {symbol: "O"}
+  //
+  //     expect(getCurrentPlayersTurn(board, player1, player2)).toEqual(player2);
+  //   })
+  //
+  //   it("Defaults to player1", function() {
+  //     let board = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+  //     let player1 = {symbol: "X"}
+  //     let player2 = {symbol: "O"}
+  //
+  //     expect(getCurrentPlayersTurn(board, player1, player2)).toEqual(player1);
+  //   });
+  // });
 
-  describe("getCurrentPlayersTurn", function() {
-    it("dynamically calculates the next players turn based on the board", function() {
-      let board = [" ", "X", " ", " ", "O", " ", " ", "X", " "];
-      let player1 = {symbol: "X"}
-      let player2 = {symbol: "O"}
-
-      expect(getCurrentPlayersTurn(board, player1, player2)).toEqual(player2);
-    })
-
-    it("Defaults to player1", function() {
-      let board = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
-      let player1 = {symbol: "X"}
-      let player2 = {symbol: "O"}
-
-      expect(getCurrentPlayersTurn(board, player1, player2)).toEqual(player1);
-    });
-  });
+  // describe("startGameLoop", function() {
+  //   beforeEach(function() {
+  //     this.gameId = 3;
+  //     this.board = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+  //     this.player1 = {type: "human", symbol: "X"}
+  //     this.player2 = {type: "computer", symbol: "O"}
+  //     this.getCompMove = jasmine.createSpy('getCompMove')
+  //     this.getHumMove = jasmine.createSpy('getHumMove')
+  //     this.updater = jasmine.createSpy('updateGame')
+  //     this.getters = {computer: this.getCompMove,
+  //                    human: this.getHumMove}
+  //   });
+  //
+  //   // it("calls the correct move function based on player type", function() {
+  //   //   startGameLoop(this.board, this.player2, this.player1, this.getters)
+  //   //
+  //   //   expect(this.getters.computer).toHaveBeenCalled();
+  //   // });
+  //   //
+  //   it("sends a call to game over to see if the game is over", function(done) {
+  //     let body = JSON.stringify({ id: "3", gameOver: false })
+  //     let res = new window.Response(body, {
+  //       status: 200,
+  //       headers: {
+  //         'Content-type': 'application/json'
+  //       }
+  //     });
+  //
+  //     spyOn(window, "fetch").and.returnValue(Promise.resolve(res));
+  //
+  //     gameTick(this.gameId, this.board, this.player2, this.player1, this.updater, this.getters).then(function() {
+  //       expect(window.fetch).toHaveBeenCalledWith('/game-over/3', { method: 'GET' });
+  //     }).then(done);
+  //   });
+  // });
 });

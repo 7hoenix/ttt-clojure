@@ -43,10 +43,11 @@
        :game updated-game}))
 
   (show-game [this id]
-    (get (deref games) id))
+    {:id id
+     :game (get (deref games) id)})
 
   (make-move [this id move]
-    (let [game (show-game this id)
+    (let [game (get (deref games) id)
           updated-game (basic-game/make-move game move)]
       {:id id
        :game (store-game-by-id! games id updated-game)})))

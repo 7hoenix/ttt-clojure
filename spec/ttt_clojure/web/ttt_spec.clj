@@ -5,28 +5,15 @@
             [ttt-clojure.game-storage :as store]
             [ttt-clojure.web.ttt :as ttt]))
 
-(describe "lookup-game"
-  (it "returns game info for a game"
-    (let [repo (store/create-atom-game-repo)
-          game-info (store/create-game repo)]
-      (should=
-        [" " " " " " " " " " " " " " " " " "]
-        (:board (ttt/lookup-game repo (:id game-info))))))
-
-  (it "returns a string of not found if not found"
-    (let [repo (store/create-atom-game-repo)]
-      (should=
-        "Not found"
-        (ttt/lookup-game repo 1000)))))
-
 (describe "Show game"
   (it "returns the proper game as json based on a get request"
     (let [repo (store/create-atom-game-repo)
           game-info (store/create-game repo)
           request (mock/request :get "/games/1")]
       (should=
-        (:game game-info)
-        (:body ((ttt/show-game repo) request))))))
+          (:game game-info)
+          (:game
+            (:body ((ttt/show-game repo) request)))))))
 
 (describe "Update game"
   (it "returns the game with an updated board"
@@ -50,15 +37,16 @@
         (:id
           (:body ((ttt/create-game repo) request)))))))
 
-(describe "ai-move"
-  (it "sends a request to minimax and returns the move"
-    (let [repo (store/create-atom-game-repo)
-          game-info (store/create-game repo)
-          request (mock/request :get "/ai-move/1")]
-      (store/make-move repo 1 {:location 0
-                               :player "X"})
-        (should=
-          {:location 4
-           :player "O"
-           :id 1}
-          (:body ((ttt/ai-move repo) request))))))
+; (describe "ai-move"
+;   (it "sends a request to minimax and returns the move"
+;     (let [repo (store/create-atom-game-repo)
+;           board [" " "O" " " " " " " " " " " " "  " "]
+;           request (mock/request :get "/ai-move/1")]
+;       (swap! (store/games repo assoc 1 {:board }))
+;       (store/make-move repo 1 {:location 0
+;                                :player "X"})
+;         (should=
+;           {:location 4
+;            :player "O"
+;            :id 1}
+;           (:body ((ttt/ai-move repo) request))))))

@@ -18,11 +18,12 @@
           ["X" " " " " " " " " " " " " " " " "]
           (:board
             (:game
-              (store/make-move @test-repo 1 move))))))
+                (store/make-move @test-repo 1 move))))))
 
   (it "can return the requested game"
       (store/create-game @test-repo)
       (should=
         [" " " " " " " " " " " " " " " " " "]
         (:board
-            (store/show-game @test-repo 1)))))
+          (:game
+            (store/show-game @test-repo 1))))))
