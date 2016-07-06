@@ -25,4 +25,4 @@ Then you have two different options in terms of how you'd like to play it.
 * Back end core logic and CLI version is built in Clojure.
 * Web version is served directly on top of Ring (with NO Compojure).
 * Front end is built with JS.
-* Pretty colors in the new front end thanks to [Adobes cool color wheel](color.adobe.com).
+* Pretty colors in the new front end thanks to [Adobes cool color wheel](https://color.adobe.com/create/color-wheel/).
