@@ -26,7 +26,8 @@ describe("Game", function() {
 
   describe("createGame", function() {
    	it("posts the game creation request to the server", function(done) {
-      let body = JSON.stringify({ id: "1" , game: { board: [" ", " ", " "]}})
+      let body = JSON.stringify({ id: "1" , game: { board: [" ", " ", " "],
+                                                    "type-of-player": "my.Web"}})
       let res = new window.Response(body, {
         status: 200,
         headers: {
@@ -44,7 +45,8 @@ describe("Game", function() {
 
   describe("displayGame", function() {
     it("sets the game id on the #game-id div", function() {
-      let response = {id: 1, game: {board: [" ", " "]}};
+      let response = {id: 1, game: {board: [" ", " "],
+                                    "type-of-player": "my.Web" }};
 
       displayGame(response)
 
@@ -54,7 +56,8 @@ describe("Game", function() {
 
   describe("updateGame", function() {
     it("hands a put request to update the game board to the server", function(done) {
-      let body = JSON.stringify({ id: "3" , game: { board: [" ", " ", "X"]}})
+      let body = JSON.stringify({ id: "3" , game: {board: [" ", " ", "X"],
+                                                   "type-of-player": "my.Web"}})
       let res = new window.Response(body, {
         status: 200,
         headers: {
