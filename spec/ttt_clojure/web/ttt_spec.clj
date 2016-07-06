@@ -11,9 +11,10 @@
           game-info (store/create-game repo)
           request (mock/request :get "/games/1")]
       (should=
-          (:game game-info)
+        [" " " " " " " " " " " " " " " " " "]
+        (:board
           (:game
-            (:body ((ttt/show-game repo) request)))))))
+            (:body ((ttt/show-game repo) request))))))))
 
 (describe "Update game"
   (it "returns the game with an updated board"
