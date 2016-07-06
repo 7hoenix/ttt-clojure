@@ -51,6 +51,10 @@ function last3Characters(str) {
 	return str.substr(str.length - 3)
 }
 
+function displayOutcome(outcome) {
+	alert(outcome ? outcome : "cat's game")
+}
+
 function displayGame(response) {
 	let idDiv = document.querySelector( "#game-id" )
 	idDiv.innerText = response.id;
@@ -58,7 +62,7 @@ function displayGame(response) {
 	let playerType = last3Characters(response.game["type-of-player"]);
 
 	if (response.game["game-over"] === true) {
-		alert(response.game["outcome"]);
+		displayOutcome(response.game["outcome"]);
 	} else if (playerType === "Web") {
 		getHumanMove(response.id, response.game["board"], updateGame)
 	} else if (playerType === ".AI") {
