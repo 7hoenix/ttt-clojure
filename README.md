@@ -6,9 +6,9 @@ Clone down the repo.
 
 Then you have two different options in terms of how you'd like to play it.
 
-**NOTE** Must have [leiningen](https://leiningen.org/) installed.
+**NOTE =>** Must have [leiningen](https://leiningen.org/) installed.
 
-**NOTE ON THE NOTE** You can just use homebrew to do it...
+**NOTE ON THE NOTE =>** You can just use homebrew to do it...
 
 `$ brew install leiningen`
 
