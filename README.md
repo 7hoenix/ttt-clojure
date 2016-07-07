@@ -6,6 +6,12 @@ Clone down the repo.
 
 Then you have two different options in terms of how you'd like to play it.
 
+**NOTE** Must have [leiningen](https://leiningen.org/) installed.
+
+**NOTE ON THE NOTE** You can just use homebrew to do it...
+
+`$ brew install leiningen`
+
 ### Option 1 => Command Line Interface
 
 ![Command Line version demo](http://g.recordit.co/7PdbfFtoZX.gif)
