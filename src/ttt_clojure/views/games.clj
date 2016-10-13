@@ -12,7 +12,7 @@
                [:body
                 [:div {:class "container"} contents]
                 (page/include-js "/js/Games.js")
-                (element/javascript-tag "createGame()")]))
+                (element/javascript-tag "window.onload = createGame")]))
 
 (defn home []
   (wrap-html (str "Home")
