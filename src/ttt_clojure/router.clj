@@ -22,6 +22,5 @@
       (params/wrap-params)
       (resource/wrap-resource "public")
       (content/wrap-content-type)
-      (not-modified/wrap-not-modified)
       (json/wrap-json-response)
       (reload/wrap-reload)))
